@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <title>Processing JS IDE</title>
+
+    
+    <link href="style/reset.css" type="text/css" rel="stylesheet" media="screen" />
+    <link rel="stylesheet" href="lib/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+    <link href="style/processingjs_ide.css" type="text/css" rel="stylesheet" media="screen" />
+  </head>
+  <body>
+    <div style="display: none;">
+      <div id="canvas">
+	<canvas id="processing_canvas" height="800" width="800">
+	</canvas>
+      </div>
+    </div>
+
+    <div id="ide">
+      <img id="logo" src="images/processing_ide_logo.png" />
+
+      <div id="buttons">
+	<a id="run_button" href="#canvas"><img class="button" id="run_button_image" src="icons/run.png" width="50" height="50" /></a>
+      </div>
+    
+      <div id="editor">// comments go here
+
+void setup()
+{
+  size(200,200);
+  background(125);
+  fill(255);
+  noLoop();
+  PFont fontA = loadFont("courier");
+  textFont(fontA, 14);  
+}
+
+void draw(){  
+  text("Hello Web!",20,20);
+  println("Hello ErrorLog!");
+} </div>
+
+      
+    </div>
+
+    <script type="text/javascript" src="lib/ace/ace.js" charset="utf-8"></script>
+    <script type="text/javascript" src="lib/ace/theme-eclipse.js" charset="utf-8"></script>
+    <script type="text/javascript" src="lib/ace/mode-java.js" charset="utf-8"></script>
+    <script type="text/javascript" src="lib/processing/processing-1.1.0.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="lib/fancybox/jquery.fancybox-1.3.4.pack.js" charset="utf-8"></script>
+    <script type="text/javascript" src="lib/fancybox/jquery.easing-1.3.pack.js"></script>
+    <script type="text/javascript" src="src/processingjs_ide.js" charset="utf-8"></script>
+
+  </body>
+</html>

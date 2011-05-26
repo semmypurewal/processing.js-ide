@@ -31,14 +31,18 @@ $(document).ready(function()  {
 		error = err;
 		Processing.logger.log(err);
 		parent.$.fancybox.cancel();
-		p.exit();
+		if(p)  {
+		    p.exit();
+		}
 	    }
 	},
 	'onComplete' : function()  {
 	    $("#processing_canvas").focus();
 	},
 	'onCleanup' : function()  {
-	    p.exit();
+	    if(p)  {
+		p.exit();
+	    }
 	}
     });
 });

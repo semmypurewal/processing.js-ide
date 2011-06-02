@@ -26,6 +26,11 @@ $(document).ready(function()  {
 
 	    try  {
 		p = new Processing(canvas, code);
+		var dimensions = code.match(/\s+size\((\d+),(\d+)\)/);
+                var width = parseInt(dimensions[1]);
+		var height = parseInt(dimensions[2]);
+                $("#processing_canvas").css('width',width);
+                $("#processing_canvas").css('height',height);
 	    }
 	    catch(err)  {
 		error = err;
@@ -37,6 +42,8 @@ $(document).ready(function()  {
 	    }
 	},
 	'onComplete' : function()  {
+            $("#fancybox-content").css('height',$("#processing_canvas").css('height'));                                                                                 
+            $("#fancybox-content").css('width',$("#processing_canvas").css('width'));
 	    $("#processing_canvas").focus();
 	},
 	'onCleanup' : function()  {

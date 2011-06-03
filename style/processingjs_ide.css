@@ -1,5 +1,6 @@
 body {
-
+  width:960px;
+  margin: 10px auto 0 auto;
 }
 
 #logo  {
@@ -7,9 +8,7 @@ body {
 }
 
 #ide  {
-  width:960px;
-  margin: 10px auto 0 auto;;
-
+  margin: 10px auto 0 auto;
 }
 
 #buttons  {
@@ -24,6 +23,8 @@ body {
 
 .button  {
   border: 2px solid #EEEEEE;
+  height: 50px;
+  width: 50px;
 }
 
 .button:hover  {

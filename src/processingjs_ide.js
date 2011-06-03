@@ -1,13 +1,29 @@
 $(document).ready(function()  {
     var p;  //processing object
+    var i = new ide();
+    i.code('// comments go here\n'+
 
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/eclipse");
-    //document.getElementById('editor').style.fontSize='16px';
-    
-    var JavaMode = require("ace/mode/java").Mode;
-    editor.getSession().setMode(new JavaMode());
-    editor.setHighlightActiveLine(false);
+'void setup()\n'+
+'{'+
+'    size(200,200);\n'+
+'    background(125);\n'+
+'    fill(255);\n'+
+'    noLoop();\n'+
+'    PFont fontA = loadFont("courier");\n'+
+'    textFont(fontA, 14);\n'+
+'}\n\n'+
+
+'void draw(){\n'+
+'    text("Hello Web!",20,20);\n'+
+'    println("Hello ErrorLog!");\n'+
+'}');
+
+
+    i.button("run","icons/run.png", function()  {
+	return false;
+    });
+
+    i.button("run").setAttribute("href","#canvas");
 
     $("#run_button").fancybox({
 	'padding' : 0,
@@ -20,7 +36,7 @@ $(document).ready(function()  {
 	'transitionIn' : 'elastic',
 	'transitionOut' : 'elastic',
 	'onStart' : function()  {
-	    var code = editor.getSession().getValue();
+	    var code = i.code();
 	    var canvas = document.getElementById("processing_canvas");
 	    var error = null;
 

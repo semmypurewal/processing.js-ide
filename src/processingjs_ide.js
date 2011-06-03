@@ -4,7 +4,7 @@ $(document).ready(function()  {
     i.code('// comments go here\n'+
 
 'void setup()\n'+
-'{'+
+'{\n'+
 '    size(200,200);\n'+
 '    background(125);\n'+
 '    fill(255);\n'+

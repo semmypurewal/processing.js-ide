@@ -12,7 +12,6 @@ $(document).ready(function()  {
 '    PFont fontA = loadFont("courier");\n'+
 '    textFont(fontA, 14);\n'+
 '}\n\n'+
-
 'void draw(){\n'+
 '    text("Hello Web!",20,20);\n'+
 '    println("Hello ErrorLog!");\n'+

@@ -17,14 +17,13 @@ $(document).ready(function()  {
 '    println("Hello ErrorLog!");\n'+
 '}');
 
-
     i.button("run","icons/run.png", function()  {
 	return false;
     });
 
     i.button("run").setAttribute("href","#canvas");
 
-    $("#run_button").fancybox({
+    $(i.button("run")).fancybox({
 	'padding' : 0,
 	'titleShow' : false,
 	'type' : 'inline',

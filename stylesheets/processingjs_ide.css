@@ -41,6 +41,25 @@ body {
   height: 450px;
 }
 
+#message  {
+  line-height:14px;
+  padding-left: 12px;
+  float: left;
+  width:70%;
+  text-align: left;
+  font-family: courier,monospace;
+  font-size:10pt;
+  color: #a9a9a9;
+}
+
+#title  {
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  color:#999999;
+  text-align:right;
+}
+
+
 #fancybox-wrap  {
   z-index:500000;
 }      

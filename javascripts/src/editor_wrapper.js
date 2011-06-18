@@ -24,21 +24,37 @@ THE SOFTWARE.
     function ide(divName, options)  {
 	var divName = divName || "ide";
 	var ideDiv = window.document.getElementById(divName);
+	var messageDiv = window.document.createElement("div");
+	messageDiv.setAttribute("id", "message");
+	var titleDiv = window.document.createElement("div");
+	titleDiv.setAttribute("id", "title");
 	var buttonsDiv = window.document.createElement("div");
 	buttonsDiv.setAttribute("id", "buttons");
 	var editorDiv = window.document.createElement("div");
 	editorDiv.setAttribute("id", "editor");
+	ideDiv.appendChild(messageDiv);
+	ideDiv.appendChild(titleDiv);
 	ideDiv.appendChild(buttonsDiv);
 	ideDiv.appendChild(editorDiv);
-	
+
+	//set up default message options
+	var messageShow = function(div)  {
+	    div.setAttribute("style","display:block");
+	};
+	var messageHide = function(div)  {
+	    div.setAttribute("style","display:none");
+	};
+	var messageTimeout = 5000;
+
+	//set up ace editor
 	var editor = ace.edit("editor");
 	editor.setTheme("ace/theme/eclipse");
-
 	var JavaMode = require("ace/mode/java").Mode;
 	editor.getSession().setMode(new JavaMode());
 	editor.setHighlightActiveLine(false);
 
-	//code getter/setter, no argument gets code, argument sets code
+	//code getter/setter, no argument gets code,
+	//argument sets code
 	ide.prototype.code = function(code)  {
 	    if(!code)  {
 		return editor.getSession().getValue();
@@ -48,6 +64,8 @@ THE SOFTWARE.
 	    }
 	}
 
+	//set up a handler for when there is a
+	//change to the document that is being edited
 	ide.prototype.onChange = function(fn)  {
 	    editor.getSession().on('change', fn);
 	}
@@ -67,11 +85,46 @@ THE SOFTWARE.
 		buttonA.onclick = function() { fn(); };
 	    }
 	    else  {
-		return window.document.getElementById(name+"_button");;
+		var b = window.document.getElementById(name+"_button");
+		if(b)  {
+		    return window.document.getElementById(name+"_button");
+		} else  {
+		    throw new Error("no button named \"" + name + "\" exists!");
+		}
+
 	    }
 	}
 
+	//flash a message to the message area
+	ide.prototype.message = function(message)  {
+	    messageDiv.setAttribute("style", "display:none");
+	    messageDiv.firstChild?messageDiv.firstChild.data=message:messageDiv.appendChild(document.createTextNode(message));
+
+	    messageShow(messageDiv);
+	    setTimeout(function()  {
+		messageHide(messageDiv);
+	    }, messageTimeout);
+	};
+
+	//set up options for displaying messages
+	ide.prototype.messageOptions = function(options)  {
+	    if(options.show)  {
+		messageShow = options.show;
+	    }
+	    if(options.hide)  {
+		messageHide = options.hide;
+	    }
+	    if(options.time)  {
+		messageTimeout = options.time;
+	    }
+	}
+
+	//set title
+	ide.prototype.title = function(title)  {
+	    titleDiv.firstChild?titleDiv.firstChild.data=title:titleDiv.appendChild(document.createTextNode(title))
+	}
+
     }
-	
+
     window.ide = ide;
 })(window);

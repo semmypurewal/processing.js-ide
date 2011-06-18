@@ -20,10 +20,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 **/
 
-
 $(document).ready(function()  {
     var p;  //processing object
     var i = new ide();
+
+    i.title("processing.js project");
+
     i.code('// comments go here\n'+
 
 'void setup()\n'+
@@ -44,6 +46,29 @@ $(document).ready(function()  {
 	return false;
     });
 
+    i.button("save", "icons/save.png", function()  {
+	i.message("save button pressed.");
+	return false;
+    });
+
+    i.button("attach", "icons/attach.png", function()  {
+	i.message("attach button pressed.");
+	return false;
+    });
+
+    i.messageOptions({
+	show:function(div)  {
+	    $(div).fadeIn();
+	}, 
+	hide:function(div)  {
+	    $(div).fadeOut();
+	},
+	time: 3000
+    });
+
+
+    i.button("save").setAttribute("href","#");
+    i.button("attach").setAttribute("href","#");
     i.button("run").setAttribute("href","#canvas");
 
     $(i.button("run")).fancybox({

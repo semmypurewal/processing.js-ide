@@ -42,16 +42,16 @@ $(document).ready(function()  {
 '    println("Hello ErrorLog!");\n'+
 '}');
 
-    i.button("run","icons/run.png", function()  {
+    i.button("run","images/icons/run.png", function()  {
 	return false;
     });
 
-    i.button("save", "icons/save.png", function()  {
+    i.button("save", "images/icons/save.png", function()  {
 	i.message("save button pressed.");
 	return false;
     });
 
-    i.button("attach", "icons/attach.png", function()  {
+    i.button("attach", "images/icons/attach.png", function()  {
 	i.message("attach button pressed.");
 	return false;
     });

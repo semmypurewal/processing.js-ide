@@ -11,55 +11,6 @@ body {
   margin: 10px auto 0 auto;
 }
 
-#buttons  {
-  margin-top:10px;
-  padding: 5px;
-  background: #EEEEEE;
-  border-style: solid;
-  border-color: #A9A9A9;
-  border-width: 1px 1px 0 1px;
-  border-radius: 5px 5px 0 0;
-}
-
-.button  {
-  border: 2px solid #EEEEEE;
-  height: 50px;
-  width: 50px;
-}
-
-.button:hover  {
-  background: #FFFFEE;
-  border: 2px dotted #A9A9A9;
-
-}
-    
-
-#editor { 
-  border-top: 1px solid #A9A9A9;
-  white-space:pre;
-  width:960px;;
-  height: 450px;
-}
-
-#message  {
-  line-height:14px;
-  padding-left: 12px;
-  float: left;
-  width:70%;
-  text-align: left;
-  font-family: courier,monospace;
-  font-size:10pt;
-  color: #a9a9a9;
-}
-
-#title  {
-  font-family: arial, sans-serif;
-  font-weight: bold;
-  color:#999999;
-  text-align:right;
-}
-
-
 #fancybox-wrap  {
   z-index:500000;
 }      

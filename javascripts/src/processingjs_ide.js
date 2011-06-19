@@ -22,11 +22,11 @@ THE SOFTWARE.
 
 $(document).ready(function()  {
     var p;  //processing object
-    var i = new ide();
+    var ide = new IDE();
 
-    i.title("processing.js project");
+    ide.title("processing.js project");
 
-    i.code('// comments go here\n'+
+    ide.code('// comments go here\n'+
 
 'void setup()\n'+
 '{\n'+
@@ -42,21 +42,21 @@ $(document).ready(function()  {
 '    println("Hello ErrorLog!");\n'+
 '}');
 
-    i.button("run","images/icons/run.png", function()  {
+    ide.button("run","images/icons/run.png", function()  {
 	return false;
     });
 
-    i.button("save", "images/icons/save.png", function()  {
-	i.message("save button pressed.");
+    ide.button("save", "images/icons/save.png", function()  {
+	ide.message("save button pressed.");
 	return false;
     });
 
-    i.button("attach", "images/icons/attach.png", function()  {
-	i.message("attach button pressed.");
+    ide.button("attach", "images/icons/attach.png", function()  {
+	ide.message("attach button pressed.");
 	return false;
     });
 
-    i.messageOptions({
+    ide.messageOptions({
 	show:function(div)  {
 	    $(div).fadeIn();
 	}, 
@@ -67,11 +67,11 @@ $(document).ready(function()  {
     });
 
 
-    i.button("save").setAttribute("href","#");
-    i.button("attach").setAttribute("href","#");
-    i.button("run").setAttribute("href","#canvas");
+    ide.button("save").setAttribute("href","#");
+    ide.button("attach").setAttribute("href","#");
+    ide.button("run").setAttribute("href","#canvas");
 
-    $(i.button("run")).fancybox({
+    $(ide.button("run")).fancybox({
 	'padding' : 0,
 	'titleShow' : false,
 	'type' : 'inline',
@@ -82,7 +82,7 @@ $(document).ready(function()  {
 	'transitionIn' : 'elastic',
 	'transitionOut' : 'elastic',
 	'onStart' : function()  {
-	    var code = i.code();
+	    var code = ide.code();
 	    var canvas = document.getElementById("processing_canvas");
 	    var error = null;
 

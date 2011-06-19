@@ -21,17 +21,17 @@ THE SOFTWARE.
 **/
 
 (function (window)  {
-    function ide(divName, options)  {
+    function IDE(divName, options)  {
 	var divName = divName || "ide";
 	var ideDiv = window.document.getElementById(divName);
 	var messageDiv = window.document.createElement("div");
-	messageDiv.setAttribute("id", "message");
+	messageDiv.setAttribute("id", "IDE-message");
 	var titleDiv = window.document.createElement("div");
-	titleDiv.setAttribute("id", "title");
+	titleDiv.setAttribute("id", "IDE-title");
 	var buttonsDiv = window.document.createElement("div");
-	buttonsDiv.setAttribute("id", "buttons");
+	buttonsDiv.setAttribute("id", "IDE-buttons");
 	var editorDiv = window.document.createElement("div");
-	editorDiv.setAttribute("id", "editor");
+	editorDiv.setAttribute("id", "IDE-editor");
 	ideDiv.appendChild(messageDiv);
 	ideDiv.appendChild(titleDiv);
 	ideDiv.appendChild(buttonsDiv);
@@ -48,7 +48,7 @@ THE SOFTWARE.
 	var messageTimer;
 
 	//set up ace editor
-	var editor = ace.edit("editor");
+	var editor = ace.edit("IDE-editor");
 	editor.setTheme("ace/theme/eclipse");
 	var JavaMode = require("ace/mode/java").Mode;
 	editor.getSession().setMode(new JavaMode());
@@ -56,7 +56,7 @@ THE SOFTWARE.
 
 	//code getter/setter, no argument gets code,
 	//argument sets code
-	ide.prototype.code = function(code)  {
+	IDE.prototype.code = function(code)  {
 	    if(!code)  {
 		return editor.getSession().getValue();
 	    }
@@ -67,28 +67,28 @@ THE SOFTWARE.
 
 	//set up a handler for when there is a
 	//change to the document that is being edited
-	ide.prototype.onChange = function(fn)  {
+	IDE.prototype.onChange = function(fn)  {
 	    editor.getSession().on('change', fn);
 	}
 
 	// button getter/adder
 	// if img and fn are defined, adds a button to the ide
 	// else returns the a element associated with the button
-	ide.prototype.button = function(name, img, fn)  {
+	IDE.prototype.button = function(name, img, fn)  {
 	    if(img && fn)  {
 		var buttonImg = window.document.createElement("img");
-		buttonImg.setAttribute("class", "button");
+		buttonImg.setAttribute("class", "IDE-button");
 		buttonImg.setAttribute("src",img);
 		var buttonA = window.document.createElement("a");
-		buttonA.setAttribute("id", name+"_button");
+		buttonA.setAttribute("id", "IDE-"+name+"_button");
 		buttonA.appendChild(buttonImg);
 		buttonsDiv.appendChild(buttonA);
 		buttonA.onclick = function() { fn(); };
 	    }
 	    else  {
-		var b = window.document.getElementById(name+"_button");
+		var b = window.document.getElementById("IDE-"+name+"_button");
 		if(b)  {
-		    return window.document.getElementById(name+"_button");
+		    return window.document.getElementById("IDE-"+name+"_button");
 		} else  {
 		    throw new Error("no button named \"" + name + "\" exists!");
 		}
@@ -97,7 +97,7 @@ THE SOFTWARE.
 	}
 
 	//flash a message to the message area
-	ide.prototype.message = function(message)  {
+	IDE.prototype.message = function(message)  {
 	    if(messageTimer)  {
 		clearTimeout(messageTimer);
 	    }
@@ -111,7 +111,7 @@ THE SOFTWARE.
 	};
 
 	//set up options for displaying messages
-	ide.prototype.messageOptions = function(options)  {
+	IDE.prototype.messageOptions = function(options)  {
 	    if(options.show)  {
 		messageShow = options.show;
 	    }
@@ -124,11 +124,11 @@ THE SOFTWARE.
 	}
 
 	//set title
-	ide.prototype.title = function(title)  {
+	IDE.prototype.title = function(title)  {
 	    titleDiv.firstChild?titleDiv.firstChild.data=title:titleDiv.appendChild(document.createTextNode(title))
 	}
 
     }
 
-    window.ide = ide;
+    window.IDE = IDE;
 })(window);

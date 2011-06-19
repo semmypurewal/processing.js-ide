@@ -45,6 +45,7 @@ THE SOFTWARE.
 	    div.setAttribute("style","display:none");
 	};
 	var messageTimeout = 5000;
+	var messageTimer;
 
 	//set up ace editor
 	var editor = ace.edit("editor");
@@ -97,11 +98,14 @@ THE SOFTWARE.
 
 	//flash a message to the message area
 	ide.prototype.message = function(message)  {
+	    if(messageTimer)  {
+		clearTimeout(messageTimer);
+	    }
 	    messageDiv.setAttribute("style", "display:none");
 	    messageDiv.firstChild?messageDiv.firstChild.data=message:messageDiv.appendChild(document.createTextNode(message));
 
 	    messageShow(messageDiv);
-	    setTimeout(function()  {
+	    messageTimer = setTimeout(function()  {
 		messageHide(messageDiv);
 	    }, messageTimeout);
 	};

@@ -21,11 +21,10 @@ THE SOFTWARE.
 **/
 
 $(document).ready(function()  {
-
     var ide = new IDE();
+    ide.title("processing.js demo");
 
-    ide.title("processing.js project");
-
+    //set up some default code
     ide.code('// comments go here\n'+
 
 'void setup()\n'+
@@ -42,20 +41,8 @@ $(document).ready(function()  {
 '    println("Hello ErrorLog!");\n'+
 '}');
 
-    ide.button("run","images/icons/run.png", function()  {
-	return false;
-    });
 
-    ide.button("save", "images/icons/save.png", function()  {
-	ide.message("save button pressed.");
-	return false;
-    });
-
-    ide.button("attach", "images/icons/attach.png", function()  {
-	ide.message("attach button pressed.");
-	return false;
-    });
-
+    // set the message box to fade in and fade out
     ide.messageOptions({
 	show:function(div)  {
 	    $(div).fadeIn();
@@ -66,14 +53,16 @@ $(document).ready(function()  {
 	time: 3000
     });
 
+    //RUN BUTTON CODE
+    var p;  //processing object
+    var error;  //processing error
 
-    ide.button("save").setAttribute("href","#");
-    ide.button("attach").setAttribute("href","#");
+    ide.button("run","images/icons/run.png", function()  {
+	return false;
+    });
+
     ide.button("run").setAttribute("href","#canvas");
 
-
-    var p;  //processing object
-    var error;
     $(ide.button("run")).fancybox({
 	'padding' : 0,
 	'titleShow' : false,
@@ -121,4 +110,5 @@ $(document).ready(function()  {
 	    }
 	}
     });
+    //END RUN BUTTON CODE
 });

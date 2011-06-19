@@ -1,5 +1,5 @@
 #IDE-buttons  {
-  margin-top:10px;
+  margin-top:5px;
   padding: 5px;
   background: #EEEEEE;
   border-style: solid;
@@ -19,7 +19,6 @@
   border: 2px dotted #A9A9A9;
 
 }
-    
 
 #IDE-editor { 
   border-top: 1px solid #A9A9A9;

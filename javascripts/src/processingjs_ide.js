@@ -21,7 +21,7 @@ THE SOFTWARE.
 **/
 
 $(document).ready(function()  {
-    var p;  //processing object
+
     var ide = new IDE();
 
     ide.title("processing.js project");
@@ -71,6 +71,9 @@ $(document).ready(function()  {
     ide.button("attach").setAttribute("href","#");
     ide.button("run").setAttribute("href","#canvas");
 
+
+    var p;  //processing object
+    var error;
     $(ide.button("run")).fancybox({
 	'padding' : 0,
 	'titleShow' : false,
@@ -84,7 +87,7 @@ $(document).ready(function()  {
 	'onStart' : function()  {
 	    var code = ide.code();
 	    var canvas = document.getElementById("processing_canvas");
-	    var error = null;
+	    error = null;
 
 	    try  {
 		p = new Processing(canvas, code);
@@ -97,16 +100,20 @@ $(document).ready(function()  {
 	    catch(err)  {
 		error = err;
 		Processing.logger.log(err);
-		parent.$.fancybox.cancel();
+		$.fancybox.cancel();
 		if(p)  {
 		    p.exit();
 		}
 	    }
 	},
 	'onComplete' : function()  {
-            $("#fancybox-content").css('height',$("#processing_canvas").css('height'));                                                                                 
-            $("#fancybox-content").css('width',$("#processing_canvas").css('width'));
-	    $("#processing_canvas").focus();
+	    if(error)  {
+		$.fancybox.close();
+	    } else  {
+		$("#fancybox-content").css('height',$("#processing_canvas").css('height'));                                                                                 
+		$("#fancybox-content").css('width',$("#processing_canvas").css('width'));
+		$("#processing_canvas").focus();
+	    }
 	},
 	'onCleanup' : function()  {
 	    if(p)  {

@@ -22,6 +22,7 @@ THE SOFTWARE.
 
 (function (window)  {
     function IDE(divName, options)  {
+        var buttonTemplate = Handlebars.compile("<a id='IDE-{{name}}_button'><img src='{{img}}' class='IDE-button'></img></a>");
         var divName = divName || "ide";
         var ideDiv = window.document.getElementById(divName);
         var messageDiv = window.document.createElement("div");
@@ -78,14 +79,9 @@ THE SOFTWARE.
         // else returns the a element associated with the button
         IDE.prototype.button = function(name, img, fn)  {
             if(img && fn)  {
-                var buttonImg = window.document.createElement("img");
-                buttonImg.setAttribute("class", "IDE-button");
-                buttonImg.setAttribute("src",img);
-                var buttonA = window.document.createElement("a");
-                buttonA.setAttribute("id", "IDE-"+name+"_button");
-                buttonA.appendChild(buttonImg);
-                buttonsDiv.appendChild(buttonA);
-                buttonA.onclick = function() { fn(); };
+                var button = $(buttonTemplate({ name:name, img:img }));
+                button.click(function () { fn(); });
+                $(buttonsDiv).append(button);
             }
             else  {
                 var b = window.document.getElementById("IDE-"+name+"_button");
@@ -94,7 +90,6 @@ THE SOFTWARE.
                 } else  {
                     throw new Error("no button named \"" + name + "\" exists!");
                 }
-
             }
         }
 

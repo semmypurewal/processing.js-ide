@@ -23,20 +23,10 @@ THE SOFTWARE.
 (function (window)  {
     function IDE(divName, options)  {
         var buttonTemplate = Handlebars.compile("<a id='IDE-{{name}}_button'><img src='{{img}}' class='IDE-button'></img></a>");
+        var buttonsTemplate = Handlebars.compile("<div id='IDE-buttons'>{{#each buttons}}<a id='IDE-{{this.name}}_button'><img src='{{this.img}}' class='IDE-button'></img></a>{{/each}}</div>");
         var divName = divName || "ide";
-        var ideDiv = window.document.getElementById(divName);
-        var messageDiv = window.document.createElement("div");
-        messageDiv.setAttribute("id", "IDE-message");
-        var titleDiv = window.document.createElement("div");
-        titleDiv.setAttribute("id", "IDE-title");
-        var buttonsDiv = window.document.createElement("div");
-        buttonsDiv.setAttribute("id", "IDE-buttons");
-        var editorDiv = window.document.createElement("div");
-        editorDiv.setAttribute("id", "IDE-editor");
-        ideDiv.appendChild(messageDiv);
-        ideDiv.appendChild(titleDiv);
-        ideDiv.appendChild(buttonsDiv);
-        ideDiv.appendChild(editorDiv);
+        var titleDiv = $("#IDE-title");
+        var buttonsDiv = $("#IDE-buttons");
 
         //set up default message options
         var messageShow = function(div)  {
@@ -122,7 +112,8 @@ THE SOFTWARE.
 
         //set title
         IDE.prototype.title = function(title)  {
-            titleDiv.firstChild?titleDiv.firstChild.data=title:titleDiv.appendChild(document.createTextNode(title))
+            //titleDiv.firstChild?titleDiv.firstChild.data=title:titleDiv.appendChild(document.createTextNode(title))
+            titleDiv.text(title);
         }
 
     }

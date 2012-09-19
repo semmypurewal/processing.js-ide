@@ -21,15 +21,12 @@ THE SOFTWARE.
 **/
 
 (function (window)  {
-    function IDE(divName, options)  {
-        var buttonTemplate = Handlebars.compile("<a id='IDE-{{name}}_button'><img src='{{img}}' class='IDE-button'></img></a>");
-        var buttonsTemplate = Handlebars.compile("<div id='IDE-buttons'>{{#each buttons}}<a id='IDE-{{this.name}}_button'><img src='{{this.img}}' class='IDE-button'></img></a>{{/each}}</div>");
-        var divName = divName || "ide";
+    function IDE()  {
+        var buttonTemplate = Handlebars.compile($("#button-template").html());
         var titleDiv = $("#IDE-title");
         var buttonsDiv = $("#IDE-buttons");
         var messageDiv = $("#IDE-message");
         
-
         //set up default message options
         var messageShow = function(div)  {
             div.setAttribute("style","display:block");
@@ -115,7 +112,6 @@ THE SOFTWARE.
 
         //set title
         IDE.prototype.title = function(title)  {
-            //titleDiv.firstChild?titleDiv.firstChild.data=title:titleDiv.appendChild(document.createTextNode(title))
             titleDiv.text(title);
         }
 

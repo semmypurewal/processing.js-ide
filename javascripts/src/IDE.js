@@ -27,6 +27,8 @@ THE SOFTWARE.
         var divName = divName || "ide";
         var titleDiv = $("#IDE-title");
         var buttonsDiv = $("#IDE-buttons");
+        var messageDiv = $("#IDE-message");
+        
 
         //set up default message options
         var messageShow = function(div)  {
@@ -85,15 +87,16 @@ THE SOFTWARE.
 
         //flash a message to the message area
         IDE.prototype.message = function(message)  {
+            var messageEl = messageDiv[0];
             if(messageTimer)  {
                 clearTimeout(messageTimer);
             }
-            messageDiv.setAttribute("style", "display:none");
-            messageDiv.firstChild?messageDiv.firstChild.data=message:messageDiv.appendChild(document.createTextNode(message));
+            messageEl.setAttribute("style", "display:none");
+            messageEl.firstChild?messageEl.firstChild.data=message:messageEl.appendChild(document.createTextNode(message));
 
-            messageShow(messageDiv);
+            messageShow(messageEl);
             messageTimer = setTimeout(function()  {
-                messageHide(messageDiv);
+                messageHide(messageEl);
             }, messageTimeout);
         };
 

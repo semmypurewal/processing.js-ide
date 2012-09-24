@@ -34,7 +34,6 @@ THE SOFTWARE.
         this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
 
         this.isBuiltWith("title", "%source");
-        this.isObservable();
     });
 
     var IDE = new window.jermaine.Model (function () {
@@ -58,10 +57,6 @@ THE SOFTWARE.
             this.editor().getSession().setMode(new javaMode());
             this.editor().setHighlightActiveLine(false);
             this.editor().renderer.setShowPrintMargin(false);
-        });
-
-        this.respondsTo("updateCode", function () {
-            this.editor().getSession().setValue(this.project().source());
         });
     });
 

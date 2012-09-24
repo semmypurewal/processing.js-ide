@@ -63,12 +63,12 @@ var main = function () {
     /* END TEMPORARY MESSAGE STUFF */
 
     //set up ide model
-    var jide = new window.IDE();
+    var ide = new window.IDE();
 
     //add buttons
-    jide.buttons().add(new Button("run", "images/icons/run.png", function () {
-        jide.messages().add("running program");
-        message(jide.messages().at(jide.messages().size()-1));
+    ide.buttons().add(new Button("run", "images/icons/run.png", function () {
+        ide.messages().add("running program");
+        message(ide.messages().at(ide.messages().size()-1));
         return false;
     }));
 
@@ -76,15 +76,20 @@ var main = function () {
     var project = new window.Project("processing.js ide");
 
     //attach project to ide
-    jide.project(project);
+    ide.project(project);
 
+    //wire up project's event emitter to ide's event emitter
+    project.on("change", function (data) {
+        if (data.source !== undefined) {
+            ide.editor().getSession().setValue(data.source);
+        }
+    });
+    
     //add code to editor
-    jide.editor().getSession().setValue(jide.project().source());
+    ide.editor().getSession().setValue(ide.project().source());
 
     $.get("examples/default.pjs", function (data) {
-        //update code
         project.source(data);
-        jide.updateCode();
     });
 
     //set up views
@@ -102,8 +107,8 @@ var main = function () {
         $(buttonsDiv).append(button);
     }
 
-    for (i = 0; i < jide.buttons().size(); i++) {
-        attachButtonView(jide.buttons().at(i));
+    for (i = 0; i < ide.buttons().size(); i++) {
+        attachButtonView(ide.buttons().at(i));
     }
 
     //RUN BUTTON CODE
@@ -123,7 +128,7 @@ var main = function () {
         'transitionIn' : 'elastic',
         'transitionOut' : 'elastic',
         'onStart' : function()  {
-            var code = jide.project().source();
+            var code = ide.project().source();
             var canvas = document.getElementById("processing_canvas");
             error = null;
 

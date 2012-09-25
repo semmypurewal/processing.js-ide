@@ -65,18 +65,23 @@ var main = function () {
     //set up ide model
     var ide = new window.IDE();
 
-    //add buttons
-    ide.buttons().add(new Button("run", "images/icons/run.png", function () {
-        ide.messages().add("running program");
-        message(ide.messages().at(ide.messages().size()-1));
-        return false;
-    }));
-
     //create project
     var project = new window.Project("processing.js ide");
 
     //attach project to ide
     ide.project(project);
+
+    //add buttons
+    ide.buttons().add(new Button("run", "images/icons/run.png", function () {
+        ide.messages().add("running program");
+        project.source(ide.editor().getSession().getValue());
+        message(ide.messages().at(ide.messages().size()-1));
+        return false;
+    }));
+
+
+
+
 
     //wire up project's event emitter to ide's event emitter
     project.on("change", function (data) {

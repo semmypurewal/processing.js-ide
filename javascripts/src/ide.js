@@ -23,7 +23,7 @@ THE SOFTWARE.
 (function (window)  {
     var Button = new window.jermaine.Model(function () {
         this.hasA("name").which.isA("string");
-        this.hasA("imageURL").which.isA("string");
+        this.hasAn("imageURL").which.isA("string");
         this.hasA("handler").which.isA("function");
 
         this.isBuiltWith("name", "imageURL", "handler");

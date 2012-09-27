@@ -97,6 +97,7 @@ var main = function () {
     $("#IDE-run_button").colorbox({
         'title' : ide.project().title(),
         'inline' : true,
+        'scrolling' : false,
         'href':"#canvas",
         'onLoad' : function()  {
             var code = ide.project().source();

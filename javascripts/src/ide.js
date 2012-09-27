@@ -32,8 +32,23 @@ THE SOFTWARE.
     var Project = new window.jermaine.Model(function () {
         this.hasA("title").which.isA("string");
         this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
+        this.hasA("url").which.isA("string");
 
-        this.isBuiltWith("title", "%source");
+        this.isBuiltWith("%url", function () {
+            var that = this;
+            if (this.url()) {
+                $.getJSON(this.url(), function(result) {
+                    if (!result.title || !result.source) {
+                        throw new Error("invalid project object");
+                    } else {
+                        that.title(result.title);
+                        that.source(result.source);
+                    }
+                });
+            } else {
+                that.title("default");
+            }
+        });
     });
 
     var IDE = new window.jermaine.Model (function () {
@@ -47,7 +62,7 @@ THE SOFTWARE.
             return button instanceof Button;
         });
 
-        this.isBuiltWith(function () {
+        this.isBuiltWith("%project", function () {
             //create new java mode
             var javaMode = require("ace/mode/java").Mode;
             
@@ -57,6 +72,21 @@ THE SOFTWARE.
             this.editor().getSession().setMode(new javaMode());
             this.editor().setHighlightActiveLine(false);
             this.editor().renderer.setShowPrintMargin(false);
+
+            if (this.project() !== undefined) {
+                this.editor().getSession().setValue(this.project().source());
+            }
+
+            //should eventually be handled by the view?!?!
+            this.on("change", function (data) {
+                if (data.project !== undefined && data.project.source !== undefined) {
+                    this.editor().getSession().setValue(data.project.source);
+                }
+                if (data.project !== undefined && data.project.title !== undefined) {
+                    $("#IDE-title").text(this.project().title());
+                }
+            });
+
         });
     });
 

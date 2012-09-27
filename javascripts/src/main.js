@@ -63,35 +63,15 @@ var main = function () {
     /* END TEMPORARY MESSAGE STUFF */
 
     //set up ide model
-    var ide = new window.IDE();
-
-    //create project
-    var project = new window.Project("processing.js ide");
-
-    //attach project to ide
-    ide.project(project);
+    var ide = new window.IDE(new Project("examples/hello.json"));
 
     //add buttons
     ide.buttons().add(new Button("run", "images/icons/run.png", function () {
         ide.messages().add("running program");
-        project.source(ide.editor().getSession().getValue());
+        ide.project().source(ide.editor().getSession().getValue());
         message(ide.messages().at(ide.messages().size()-1));
         return false;
     }));
-
-    //wire up project's event emitter to ide's event emitter
-    project.on("change", function (data) {
-        if (data.source !== undefined) {
-            ide.editor().getSession().setValue(data.source);
-        }
-    });
-    
-    //add code to editor
-    ide.editor().getSession().setValue(ide.project().source());
-
-    $.get("examples/default.pjs", function (data) {
-        project.source(data);
-    });
 
     //set up views
     var buttonTemplate = Handlebars.compile($("#button-template").html());
@@ -100,7 +80,7 @@ var main = function () {
     var messageDiv = $("#IDE-message");
     var i, button;
 
-    titleDiv.text(project.title());
+    titleDiv.text(ide.project().title());
 
     var attachButtonView = function (b) {
         var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));

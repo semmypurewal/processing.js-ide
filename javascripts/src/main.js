@@ -79,10 +79,6 @@ var main = function () {
         return false;
     }));
 
-
-
-
-
     //wire up project's event emitter to ide's event emitter
     project.on("change", function (data) {
         if (data.source !== undefined) {
@@ -120,19 +116,11 @@ var main = function () {
     var p;  //processing object
     var error;  //processing error
 
-    $("#IDE-run_button")[0].setAttribute("href","#canvas");
-
-    $("#IDE-run_button").fancybox({
-        'padding' : 0,
-        'titleShow' : false,
-        'type' : 'inline',
-        'width' : 'auto',
-        'height' : 'auto',
-        'scrolling' : 'no',
-        'hideOnOverlayClick' : 'true',
-        'transitionIn' : 'elastic',
-        'transitionOut' : 'elastic',
-        'onStart' : function()  {
+    $("#IDE-run_button").colorbox({
+        'title' : ide.project().title(),
+        'inline' : true,
+        'href':"#canvas",
+        'onLoad' : function()  {
             var code = ide.project().source();
             var canvas = document.getElementById("processing_canvas");
             error = null;
@@ -148,18 +136,17 @@ var main = function () {
             catch(err)  {
                 error = err;
                 Processing.logger.log(err);
-                $.fancybox.cancel();
                 if(p)  {
                     p.exit();
                 }
             }
         },
+
         'onComplete' : function()  {
             if(error)  {
-                $.fancybox.close();
+                console.log(error);
+                $.colorbox.close();
             } else  {
-                $("#fancybox-content").css('height',$("#processing_canvas").css('height'));                                                                                 
-                $("#fancybox-content").css('width',$("#processing_canvas").css('width'));
                 $("#processing_canvas").focus();
             }
         },

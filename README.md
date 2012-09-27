@@ -8,7 +8,7 @@ This repo contains Jermaine as a submodule. So to clone, do the following:
 
      git clone https://github.com/semmypurewal/processing.js-ide.git ide
      cd ide
-     git submodule updated --init
+     git submodule update --init
 
 It's MIT Licensed, so feel free to use it for whatever.
 

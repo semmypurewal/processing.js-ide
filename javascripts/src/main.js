@@ -80,8 +80,6 @@ var main = function () {
     var messageDiv = $("#IDE-message");
     var i, button;
 
-    titleDiv.text(ide.project().title());
-
     var attachButtonView = function (b) {
         var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));
         button.click(function () { b.handler()(); });

@@ -79,10 +79,10 @@ THE SOFTWARE.
 
             //should eventually be handled by the view?!?!
             this.on("change", function (data) {
-                if (data.project !== undefined && data.project.source !== undefined) {
-                    this.editor().getSession().setValue(data.project.source);
+                if (data[1].key === "project" && data[0].key === "source") {
+                    this.editor().getSession().setValue(data[0].value);
                 }
-                if (data.project !== undefined && data.project.title !== undefined) {
+                if (data[1].key === "project" && data[0].key === "title") {
                     $("#IDE-title").text(this.project().title());
                 }
             });

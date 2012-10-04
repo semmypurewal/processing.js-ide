@@ -64,6 +64,7 @@ var main = function () {
 
     //set up ide model
     var ide = new window.IDE(new Project("examples/hello.json"));
+    ide.directory("examples/dir.json");
 
     //add buttons
     ide.buttons().add(new Button("run", "images/icons/run.png", function () {
@@ -79,6 +80,8 @@ var main = function () {
     var buttonsDiv = $("#IDE-buttons");
     var messageDiv = $("#IDE-message");
     var i, button;
+
+    titleDiv.click(function () { alert("hello world!") });
 
     var attachButtonView = function (b) {
         var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));

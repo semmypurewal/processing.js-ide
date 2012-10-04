@@ -53,6 +53,7 @@ THE SOFTWARE.
 
     var IDE = new window.jermaine.Model (function () {
         this.hasAn("editor").which.isImmutable();
+        this.hasA("directory").which.isA("string");
         this.hasA("project").which.validatesWith(function (project) {
             return project instanceof Project;
         });
@@ -79,10 +80,15 @@ THE SOFTWARE.
 
             //should eventually be handled by the view?!?!
             this.on("change", function (data) {
-                if (data[1].key === "project" && data[0].key === "source") {
+                if (data[0] && data[0].key === "directory") {
+                    $.getJSON(this.directory(), function (result) {
+                        console.log(result);
+                    });
+                }
+                if (data[1] && data[1].key === "project" && data[0].key === "source") {
                     this.editor().getSession().setValue(data[0].value);
                 }
-                if (data[1].key === "project" && data[0].key === "title") {
+                if (data[1] && data[1].key === "project" && data[0].key === "title") {
                     $("#IDE-title").text(this.project().title());
                 }
             });

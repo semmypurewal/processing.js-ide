@@ -9,13 +9,17 @@
 }
 
 .IDE-button  {
+  cursor: pointer;
+  display: inline;
+}
+
+.IDE-button img {
   border: 2px solid #EEEEEE;
   height: 50px;
   width: 50px;
-  cursor: pointer;
 }
 
-.IDE-button:hover  {
+.IDE-button:hover img  {
   background: #FFFFEE;
   border: 2px dotted #A9A9A9;
 

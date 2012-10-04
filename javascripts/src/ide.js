@@ -54,6 +54,8 @@ THE SOFTWARE.
     var IDE = new window.jermaine.Model (function () {
         this.hasAn("editor").which.isImmutable();
         this.hasA("directory").which.isA("string");
+        this.hasMany("projects");
+
         this.hasA("project").which.validatesWith(function (project) {
             return project instanceof Project;
         });
@@ -80,9 +82,24 @@ THE SOFTWARE.
 
             //should eventually be handled by the view?!?!
             this.on("change", function (data) {
+                var that = this,
+                    i;
+
                 if (data[0] && data[0].key === "directory") {
                     $.getJSON(this.directory(), function (result) {
-                        console.log(result);
+                        var directoryTemplate = Handlebars.compile($("#directory-template").html());
+                        for (i = 0; i < result.length; ++i) {
+                            result[i]["directory"] = that.directory().match(/(.*)\/[A-Za-z0-9]*.json/)[1];
+                        }
+                        $("#IDE-directory").append(directoryTemplate({project:result}));
+
+                        $(".directory_listing").each(function (i, elt) {
+                            $(elt).click(function () {
+                                that.project(new Project($(elt).attr("href")));
+                                $("#IDE-directory").toggle();
+                                return false;
+                            });
+                        });
                     });
                 }
                 if (data[1] && data[1].key === "project" && data[0].key === "source") {

@@ -79,9 +79,16 @@ var main = function () {
     var titleDiv = $("#IDE-title");
     var buttonsDiv = $("#IDE-buttons");
     var messageDiv = $("#IDE-message");
+    var directoryDiv = $("#IDE-directory");
+
+    var directory = [];
+
+
     var i, button;
 
-    titleDiv.click(function () { alert("hello world!") });
+    titleDiv.click(function () {
+        $("#IDE-directory").toggle();;
+    });
 
     var attachButtonView = function (b) {
         var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));

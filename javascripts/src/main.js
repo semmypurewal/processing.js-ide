@@ -86,9 +86,10 @@ var main = function () {
 
     var i, button;
 
-    titleDiv.click(function () {
+    //commented out temporarily
+    /*titleDiv.click(function () {
         $("#IDE-directory").toggle();;
-    });
+    });*/
 
     var attachButtonView = function (b) {
         var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));

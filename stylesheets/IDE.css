@@ -58,5 +58,6 @@
   font-weight: bold;
   color: #999999;
   text-align: right;
-  cursor: pointer;
+  //temporarily commented out
+  //cursor: pointer;
 }

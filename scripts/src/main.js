@@ -111,6 +111,7 @@ var main = function () {
         'scrolling' : false,
         'href':"#canvas",
         'onLoad' : function()  {
+            var width, height;
             var code = ide.project().source();
             var canvas = document.getElementById("processing_canvas");
             error = null;
@@ -118,8 +119,13 @@ var main = function () {
             try  {
                 p = new Processing(canvas, code);
                 var dimensions = code.match(/\s+size\((\d+),(\d+)\)/);
-                var width = parseInt(dimensions[1]);
-                var height = parseInt(dimensions[2]);
+                if (dimensions !== null) {
+                    width = parseInt(dimensions[1]);
+                    height = parseInt(dimensions[2]);
+                } else {
+                    width = 200;
+                    height = 200;
+                }
                 $("#processing_canvas").css('width',width);
                 $("#processing_canvas").css('height',height);
             }

@@ -21,6 +21,14 @@ THE SOFTWARE.
 **/
 
 (function (window)  {
+    var buttonTemplate = Handlebars.compile($("#button-template").html());
+    var attachButtonView = function (b) {
+        var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));
+        button.click(function () { b.handler()(); });
+        $("#IDE-buttons").append(button);
+    }
+
+
     var Button = new window.jermaine.Model(function () {
         this.hasA("name").which.isA("string");
         this.hasAn("imageURL").which.isA("string");
@@ -83,7 +91,10 @@ THE SOFTWARE.
             //should eventually be handled by the view?!?!
             this.on("change", function (data) {
                 var that = this,
-                    i;
+                    i,
+                    messageTimer, 
+                    messageTimeout = 5000;
+
 
                 if (data[0] && data[0].key === "directory") {
                     $.getJSON(this.directory(), function (result) {
@@ -107,6 +118,26 @@ THE SOFTWARE.
                 }
                 if (data[1] && data[1].key === "project" && data[0].key === "title") {
                     $("#IDE-title").text(this.project().title());
+                }
+
+                if (data[0] && data[0].key === "buttons" && data[0].action === "add") {
+                    attachButtonView(data[0].value);
+                }
+
+                if (data[0] && data[0].key === "messages" && data[0].action === "add") {
+                    console.log(data[0].value);
+
+                    if (messageTimer !== null) {
+                        clearTimeout(messageTimer);
+                    }
+
+                    $("#IDE-message").css("display", "none");
+                    $("#IDE-message").text(data[0].value);
+                    $("#IDE-message").fadeIn();
+                    
+                    messageTimer = setTimeout(function()  {
+                        $("#IDE-message").fadeOut();
+                    }, messageTimeout);
                 }
             });
 

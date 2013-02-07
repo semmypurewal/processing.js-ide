@@ -21,47 +21,6 @@ THE SOFTWARE.
 **/
 
 var main = function () {
-    /* TEMPORARY MESSAGE STUFF TILL WE GET VIEWS WORKED OUT */
-    var messageTimeout = 5000;
-    var messageTimer;
-
-    var message = function(message)  {
-        var messageEl = messageDiv[0];
-        if(messageTimer)  {
-            clearTimeout(messageTimer);
-        }
-        messageEl.setAttribute("style", "display:none");
-        messageEl.firstChild?messageEl.firstChild.data=message:messageEl.appendChild(document.createTextNode(message));
-        
-        messageShow(messageEl);
-        messageTimer = setTimeout(function()  {
-            messageHide(messageEl);
-        }, messageTimeout);
-    };
-
-    var messageOptions = function(options)  {
-        if(options.show)  {
-            messageShow = options.show;
-        }
-        if(options.hide)  {
-            messageHide = options.hide;
-        }
-        if(options.time)  {
-            messageTimeout = options.time;
-        }
-    }
-
-    messageOptions({
-        show:function(div)  {
-            $(div).fadeIn();
-        }, 
-        hide:function(div)  {
-            $(div).fadeOut();
-        },
-        time: 3000
-    });
-    /* END TEMPORARY MESSAGE STUFF */
-
     //set up ide model
     var ide = new window.IDE(new Project("examples/hello.json"));
     ide.directory("examples/dir.json");
@@ -70,36 +29,22 @@ var main = function () {
     ide.buttons().add(new Button("run", "images/icons/run.png", function () {
         ide.messages().add("running program");
         ide.project().source(ide.editor().getSession().getValue());
-        message(ide.messages().at(ide.messages().size()-1));
         return false;
     }));
 
+
     //set up views
-    var buttonTemplate = Handlebars.compile($("#button-template").html());
     var titleDiv = $("#IDE-title");
-    var buttonsDiv = $("#IDE-buttons");
-    var messageDiv = $("#IDE-message");
     var directoryDiv = $("#IDE-directory");
 
     var directory = [];
 
-
-    var i, button;
+    var i;
 
     //commented out temporarily
     /*titleDiv.click(function () {
         $("#IDE-directory").toggle();;
     });*/
-
-    var attachButtonView = function (b) {
-        var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));
-        button.click(function () { b.handler()(); });
-        $(buttonsDiv).append(button);
-    }
-
-    for (i = 0; i < ide.buttons().size(); i++) {
-        attachButtonView(ide.buttons().at(i));
-    }
 
     //RUN BUTTON CODE
     var p;  //processing object

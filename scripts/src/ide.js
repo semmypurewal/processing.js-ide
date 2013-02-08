@@ -21,21 +21,117 @@ THE SOFTWARE.
 **/
 
 (function (window)  {
-    var buttonTemplate = Handlebars.compile($("#button-template").html());
-    var attachButtonView = function (b) {
-        var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));
-        button.click(function () { b.handler()(); });
-        $("#IDE-buttons").append(button);
-    }
+    var View = new window.jermaine.Model(function () {
+        var watchers = {};
 
+        this.hasAn("instance");
+        this.hasAn("id").which.isA("string");
+        this.hasA("renderer").which.isA("function");
+        this.respondsTo("render", function () {
+            return this.renderer()(this.instance().toJSON());
+        });
+
+        this.respondsTo("watch", function (attribute, responder) {
+            console.log("caching watcher for " + attribute);
+            watchers[attribute] = responder;
+        });
+
+
+        this.isBuiltWith("instance", function () {
+            console.log("hey from parent constructor");
+            if (this.instance() !== undefined) {
+                this.instance().on("change", function(data) {
+                    if (watchers[data[0].key] !== undefined) {
+                        //do something with the new value
+                        watchers[data[0].key](data[0].value);
+                    }
+                });
+            }
+
+
+            this.on("change", function (data) {
+                console.log("this has changed: " + data[0].key);
+                if (data[0].key === "instance") {
+                    this.instance().on("change", function(data) {
+                        console.log("instance has changed");
+                        if (watchers[data[0].key] !== undefined) {
+                            //do something with the new value
+                            //watchers[data[data.length-1].key](data[data.length-1].value);
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    var IDEView = new window.jermaine.Model (function () {
+        var that = this;
+
+        var messageTimer,
+            messageTimeout = 5000;
+        
+
+        this.isA(View);
+
+        this.isBuiltWith("instance", function () {
+            console.log("hey from child constructor");
+            that.parent.apply(this, [this.instance()]);
+
+            this.watch("messages", function () {
+                if (messageTimer !== null) {
+                    clearTimeout(messageTimer);
+                }
+            
+                $("#IDE-message").css("display", "none");
+                $("#IDE-message").text(data[0].value);
+                $("#IDE-message").fadeIn();
+                
+                messageTimer = setTimeout(function()  {
+                    $("#IDE-message").fadeOut();
+                }, messageTimeout);
+            });
+        });
+    });
+
+
+    var buttonTemplate = Handlebars.compile($("#button-template").html());
+
+    /*var ButtonView = new window.jermaine.View(function () {
+        this.rendersWith(function (json) {
+            return buttonTemplate(json);
+        });
+    });*/
+
+
+    var ButtonView = new window.jermaine.Model(function () {
+        this.isA(View);
+
+        this.isBuiltWith("instance", function () {
+            this.renderer(function (jsonRep) {
+                return buttonTemplate(jsonRep);
+            });
+        });
+    });
 
     var Button = new window.jermaine.Model(function () {
         this.hasA("name").which.isA("string");
         this.hasAn("imageURL").which.isA("string");
         this.hasA("handler").which.isA("function");
 
-        this.isBuiltWith("name", "imageURL", "handler");
+        this.hasA("view").which.validatesWith(function (v) {
+            return v instanceof View;
+        });
+
+        this.isBuiltWith("name", "imageURL", "handler", function () {
+            var that = this;
+            this.view(new ButtonView(this));
+
+            /*this.view(new View(function (jsonRep) {
+                return buttonTemplate(jsonRep);
+            }, this));*/
+        });
     });
+
 
     var Project = new window.jermaine.Model(function () {
         this.hasA("title").which.isA("string");
@@ -59,6 +155,9 @@ THE SOFTWARE.
         });
     });
 
+
+
+
     var IDE = new window.jermaine.Model (function () {
         this.hasAn("editor").which.isImmutable();
         this.hasA("directory").which.isA("string");
@@ -73,7 +172,11 @@ THE SOFTWARE.
             return button instanceof Button;
         });
 
+        this.hasA("view");
+
         this.isBuiltWith("%project", function () {
+            console.log("creating IDE");
+
             //create new java mode
             var javaMode = require("ace/mode/java").Mode;
             
@@ -87,14 +190,18 @@ THE SOFTWARE.
             if (this.project() !== undefined) {
                 this.editor().getSession().setValue(this.project().source());
             }
+            
+            this.view(new IDEView(this));
 
             //should eventually be handled by the view?!?!
             this.on("change", function (data) {
+
+
                 var that = this,
                     i,
                     messageTimer, 
                     messageTimeout = 5000;
-
+                
 
                 if (data[0] && data[0].key === "directory") {
                     $.getJSON(this.directory(), function (result) {
@@ -121,13 +228,18 @@ THE SOFTWARE.
                 }
 
                 if (data[0] && data[0].key === "buttons" && data[0].action === "add") {
-                    attachButtonView(data[0].value);
+                    var button = $(data[0].value.view().render());
+
+                    button.click(function () {
+                        data[0].value.handler()();
+                    });
+                    $("#IDE-buttons").append(button);
                 }
 
                 if (data[0] && data[0].key === "messages" && data[0].action === "add") {
                     console.log(data[0].value);
 
-                    if (messageTimer !== null) {
+                    /*if (messageTimer !== null) {
                         clearTimeout(messageTimer);
                     }
 
@@ -137,12 +249,13 @@ THE SOFTWARE.
                     
                     messageTimer = setTimeout(function()  {
                         $("#IDE-message").fadeOut();
-                    }, messageTimeout);
+                    }, messageTimeout);*/
                 }
             });
 
         });
     });
+
 
     window.IDE = IDE;
     window.Project = Project;

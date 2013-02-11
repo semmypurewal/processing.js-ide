@@ -23,7 +23,8 @@ THE SOFTWARE.
 (function (window)  {
     var buttonTemplate = Handlebars.compile($("#button-template").html());
     var attachButtonView = function (b) {
-        var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));
+        //parseHTML as per jquery 1.9
+        var button = $($.parseHTML(buttonTemplate({ name:b.name(), img:b.imageURL() })));
         button.click(function () { b.handler()(); });
         $("#IDE-buttons").append(button);
     }

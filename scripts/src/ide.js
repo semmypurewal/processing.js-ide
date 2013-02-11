@@ -106,9 +106,21 @@ THE SOFTWARE.
                         $("#IDE-directory").append(directoryTemplate({project:result}));
 
                         $(".directory_listing").each(function (i, elt) {
-                            $(elt).click(function () {
-                                that.project(new Project($(elt).attr("href")));
-                                $("#IDE-directory").toggle();
+                            $(elt).click(function (e) {
+                            e.preventDefault();
+                                $("#IDE-directory").flip({
+                                    speed: 80,
+                                    direction:"rl",
+                                    color:"#fff",
+                                    onBefore: function () {
+                                        $("#IDE-directory").hide();
+                                    },
+                                    onEnd: function () {
+                                        $("#ide").show();
+                                        that.editor().getSession().setValue("loading...");
+                                        that.project(new Project($(elt).attr("href")));
+                                    }
+                                });
                                 return false;
                             });
                         });

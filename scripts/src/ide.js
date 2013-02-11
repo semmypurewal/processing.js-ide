@@ -100,7 +100,7 @@ THE SOFTWARE.
                     $.getJSON(this.directory(), function (result) {
                         var directoryTemplate = Handlebars.compile($("#directory-template").html());
                         for (i = 0; i < result.length; ++i) {
-                            result[i]["directory"] = that.directory().match(/(.*)\/[A-Za-z0-9]*.json/)[1];
+                            result[i]["directory"] = "sketches";
                         }
                         $("#IDE-directory").append(directoryTemplate({project:result}));
 

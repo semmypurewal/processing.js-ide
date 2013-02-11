@@ -22,8 +22,8 @@ THE SOFTWARE.
 
 var main = function () {
     //set up ide model
-    var ide = new window.IDE(new Project("examples/hello.json"));
-    ide.directory("examples/dir.json");
+    var ide = new window.IDE(new Project("sketches/hello.json"));
+    ide.directory("sketches.json");
 
     //add buttons
     ide.buttons().add(new Button("run", "images/icons/run.png", function () {

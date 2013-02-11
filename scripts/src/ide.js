@@ -132,7 +132,7 @@ THE SOFTWARE.
         });
         
         this.watches("buttons", function (newButton) {
-            var button = $(newButton.view().render());
+            var button = $($.parseHTML(newButton.view().render()));
             //add click function
             button.click(function () {
                 newButton.handler()();

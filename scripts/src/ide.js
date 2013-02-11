@@ -109,7 +109,7 @@ THE SOFTWARE.
                             $(elt).click(function (e) {
                             e.preventDefault();
                                 $("#IDE-directory").flip({
-                                    speed: 80,
+                                    speed: 300,
                                     direction:"rl",
                                     color:"#fff",
                                     onBefore: function () {

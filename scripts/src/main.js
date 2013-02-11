@@ -44,7 +44,7 @@ var main = function () {
     titleDiv.click(function () {
         if ($("#ide").is(":visible")) {
             $("#ide").flip({
-                speed: 80,
+                speed: 300,
                 direction:"lr",
                 color:"#fff",
                 onBefore: function () {
@@ -56,7 +56,7 @@ var main = function () {
             });
         } else {
             $("#IDE-directory").flip({
-                speed: 80,
+                speed: 300,
                 direction:"rl",
                 color:"#fff",
                 onBefore: function () {

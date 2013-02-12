@@ -21,22 +21,31 @@ THE SOFTWARE.
 **/
 
 (function (window)  {
-    var buttonTemplate = Handlebars.compile($("#button-template").html());
-    var attachButtonView = function (b) {
-        var button = $(buttonTemplate({ name:b.name(), img:b.imageURL() }));
-        button.click(function () { b.handler()(); });
-        $("#IDE-buttons").append(button);
-    }
-
-
+    //////////////// BUTTON /////////////////////
     var Button = new window.jermaine.Model(function () {
         this.hasA("name").which.isA("string");
         this.hasAn("imageURL").which.isA("string");
         this.hasA("handler").which.isA("function");
 
-        this.isBuiltWith("name", "imageURL", "handler");
+        this.hasA("view").which.validatesWith(function (v) {
+            return v instanceof window.jermaine.BaseView;
+        });
+
+        this.isBuiltWith("name", "imageURL", "handler", function () {
+            var that = this;
+            this.view(new ButtonView(this));
+        });
     });
 
+    var ButtonView = new window.jermaine.View(function () {
+        var buttonTemplate = Handlebars.compile($("#button-template").html());
+        this.rendersWith(function (jsonRep) {
+            return buttonTemplate(jsonRep);
+        });
+    });
+    //////////////// BUTTON /////////////////////
+
+    //////////////// PROJECT /////////////////////
     var Project = new window.jermaine.Model(function () {
         this.hasA("title").which.isA("string");
         this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
@@ -58,7 +67,9 @@ THE SOFTWARE.
             }
         });
     });
+    //////////////// PROJECT /////////////////////
 
+    //////////////// IDE /////////////////////////
     var IDE = new window.jermaine.Model (function () {
         this.hasAn("editor").which.isImmutable();
         this.hasA("directory").which.isA("string");
@@ -72,6 +83,8 @@ THE SOFTWARE.
         this.hasMany("buttons").which.validateWith(function (button) {
             return button instanceof Button;
         });
+
+        this.hasA("view");
 
         this.isBuiltWith("%project", function () {
             //create new java mode
@@ -87,62 +100,66 @@ THE SOFTWARE.
             if (this.project() !== undefined) {
                 this.editor().getSession().setValue(this.project().source());
             }
-
-            //should eventually be handled by the view?!?!
-            this.on("change", function (data) {
-                var that = this,
-                    i,
-                    messageTimer, 
-                    messageTimeout = 5000;
-
-
-                if (data[0] && data[0].key === "directory") {
-                    $.getJSON(this.directory(), function (result) {
-                        var directoryTemplate = Handlebars.compile($("#directory-template").html());
-                        for (i = 0; i < result.length; ++i) {
-                            result[i]["directory"] = "sketches";
-                        }
-                        $("#IDE-directory").append(directoryTemplate({project:result}));
-
-                        $(".directory_listing").each(function (i, elt) {
-                            $(elt).click(function () {
-                                that.project(new Project($(elt).attr("href")));
-                                $("#IDE-directory").toggle();
-                                return false;
-                            });
-                        });
-                    });
-                }
-                if (data[1] && data[1].key === "project" && data[0].key === "source") {
-                    this.editor().getSession().setValue(data[0].value);
-                }
-                if (data[1] && data[1].key === "project" && data[0].key === "title") {
-                    $("#IDE-title").text(this.project().title());
-                }
-
-                if (data[0] && data[0].key === "buttons" && data[0].action === "add") {
-                    attachButtonView(data[0].value);
-                }
-
-                if (data[0] && data[0].key === "messages" && data[0].action === "add") {
-                    console.log(data[0].value);
-
-                    if (messageTimer !== null) {
-                        clearTimeout(messageTimer);
-                    }
-
-                    $("#IDE-message").css("display", "none");
-                    $("#IDE-message").text(data[0].value);
-                    $("#IDE-message").fadeIn();
-                    
-                    messageTimer = setTimeout(function()  {
-                        $("#IDE-message").fadeOut();
-                    }, messageTimeout);
-                }
-            });
-
+            
+            this.view(new IDEView(this));
         });
     });
+
+    var IDEView = new window.jermaine.View (function () {
+        var messageTimer,
+            messageTimeout = 5000;
+
+        this.watches("messages", function (newMessage) {
+            if (messageTimer !== null) {
+                clearTimeout(messageTimer);
+            }
+            
+            $("#IDE-message").css("display", "none");
+            $("#IDE-message").text(newMessage);
+            $("#IDE-message").fadeIn();
+            
+            messageTimer = setTimeout(function()  {
+                $("#IDE-message").fadeOut();
+            }, messageTimeout);
+        });
+
+        this.watches("project.title", function (newTitle) {
+            $("#IDE-title").text(newTitle);
+        });
+        
+        this.watches("project.source", function (newSource) {
+            this.instance().editor().getSession().setValue(newSource);
+        });
+        
+        this.watches("buttons", function (newButton) {
+            var button = $(newButton.view().render());
+            //add click function
+            button.click(function () {
+                newButton.handler()();
+            });
+            $("#IDE-buttons").append(button);
+        });
+
+        this.watches("directory", function (newDirectory) {
+            var instance = this.instance();
+            $.getJSON(newDirectory, function (result) {
+                var directoryTemplate = Handlebars.compile($("#directory-template").html());
+                for (i = 0; i < result.length; ++i) {
+                    result[i]["directory"] = "sketches";
+                }
+                $("#IDE-directory").append(directoryTemplate({project:result}));
+                
+                $(".directory_listing").each(function (i, elt) {
+                    $(elt).click(function () {
+                        instance.project(new Project($(elt).attr("href")));
+                        $("#IDE-directory").toggle();
+                        return false;
+                    });
+                });
+            });
+        });
+    });
+    //////////////// IDE /////////////////////////
 
     window.IDE = IDE;
     window.Project = Project;

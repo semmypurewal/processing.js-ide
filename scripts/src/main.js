@@ -32,13 +32,6 @@ var main = function () {
         return false;
     }));
 
-
-    //set up views
-    var titleDiv = $("#IDE-title");
-    var directoryDiv = $("#IDE-directory");
-
-    var directory = [];
-
     var i;
 
     //commented out temporarily
@@ -100,6 +93,4 @@ var main = function () {
     //END RUN BUTTON CODE
 };
 
-$(document).ready(function()  {
-    main();
-});
+$(document).ready(main);

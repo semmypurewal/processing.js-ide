@@ -32,16 +32,6 @@ var main = function () {
         return false;
     }));
 
-    ide.buttons().add(new Button("hello", "images/icons/run.png", function () {
-        ide.messages().add("hello world!");
-    }));
-
-    //set up views
-    var titleDiv = $("#IDE-title");
-    var directoryDiv = $("#IDE-directory");
-
-    var directory = [];
-
     var i;
 
     //commented out temporarily
@@ -103,6 +93,4 @@ var main = function () {
     //END RUN BUTTON CODE
 };
 
-$(document).ready(function()  {
-    main();
-});
+$(document).ready(main);

@@ -70,6 +70,24 @@ THE SOFTWARE.
     //////////////// PROJECT /////////////////////
 
     //////////////// IDE /////////////////////////
+    var toggleEditorAndDirectory = function () {
+        var direction = $("#ide").is(":visible")?"lr":"rl";
+        var elementA = $("#ide").is(":visible")?$("#ide"):$("#IDE-directory");
+        var elementB = $("#ide").is(":visible")?$("#IDE-directory"):$("#ide");
+
+        elementA.flip({
+            speed: 200,
+            direction:direction,
+            color:"#fff",
+            onBefore: function () {
+                elementA.hide();
+            },
+            onEnd: function () {
+                elementB.show();
+            }
+        });
+    };
+
     var IDE = new window.jermaine.Model (function () {
         this.hasAn("editor").which.isImmutable();
         this.hasA("directory").which.isA("string");
@@ -108,6 +126,74 @@ THE SOFTWARE.
     var IDEView = new window.jermaine.View (function () {
         var messageTimer,
             messageTimeout = 5000;
+
+        this.initializesWith(function () {
+            var that = this;
+
+            //add run button
+            this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
+                that.instance().messages().add("running program");
+                that.instance().project().source(that.instance().editor().getSession().getValue());
+                return false;
+            }));
+
+            var p;  //processing object
+            var error;  //processing error
+
+            $("#IDE-run_button").colorbox({
+                'title' : that.instance().project().title(),
+                'inline' : true,
+                'scrolling' : false,
+                'href':"#canvas",
+                'onLoad' : function()  {
+                    var width, height;
+                    var code = that.instance().project().source();
+                    var canvas = document.getElementById("processing_canvas");
+                    error = null;
+                    
+                    try  {
+                        p = new Processing(canvas, code);
+                        var dimensions = code.match(/\s+size\((\d+),(\d+)\)/);
+                        if (dimensions !== null) {
+                            width = parseInt(dimensions[1]);
+                            height = parseInt(dimensions[2]);
+                        } else {
+                            width = 200;
+                            height = 200;
+                        }
+                        $("#processing_canvas").css('width',width);
+                        $("#processing_canvas").css('height',height);
+                    }
+                    catch(err)  {
+                        error = err;
+                        Processing.logger.log(err);
+                        if(p)  {
+                            p.exit();
+                        }
+                    }
+                },
+                
+                'onComplete' : function()  {
+                    if(error)  {
+                        console.log(error);
+                        $.colorbox.close();
+                    } else  {
+                        $("#processing_canvas").focus();
+                    }
+                },
+                'onCleanup' : function()  {
+                    if(p)  {
+                        p.exit();
+                    }
+                }
+            });
+
+            //set up the click responder on the title
+            $("#IDE-title").click(function () {
+                toggleEditorAndDirectory();
+            });            
+        });
+
 
         this.watches("messages", function (newMessage) {
             if (messageTimer !== null) {
@@ -152,17 +238,7 @@ THE SOFTWARE.
                 $(".directory_listing").each(function (i, elt) {
                     $(elt).click(function () {
                         instance.project(new Project($(elt).attr("href")));
-                        $("#IDE-directory").flip({
-                            speed: 300,
-                            direction:"rl",
-                            color:"#fff",
-                            onBefore: function () {
-                                $("#IDE-directory").hide();
-                            },
-                            onEnd: function () {
-                                $("#ide").show();
-                            }
-                        })
+                        toggleEditorAndDirectory();
                         return false;
                     });
                 });

@@ -19,14 +19,18 @@
         });
 
         this.isBuiltWith("instance", "%renderer", function () {
-            var that = this;
+            var that = this,
+                key;
 
             //it's possible this is called with an empty constructor,
             //so instance could be undefined
             if (this.instance() !== undefined) {
                 this.instance().on("change", function(data) {
                     var i;
-                    var key = "";
+
+                    //reset key
+                    key = "";
+
                     for (i = data.length-1; i >= 0; i--) {
                         key += data[i].key;
                         if (i !== 0) {
@@ -50,7 +54,7 @@
     window.jermaine.View = function (specification) {
         var watchers = {},
             renderer = null,
-            initializer = function () {},
+            initializer = null,
             view,
             obj = {};
 
@@ -62,6 +66,10 @@
             watchers[a] = r;
         };
 
+        this.initializesWith = function (init) {
+            initializer = init;
+        };
+        
         specification.call(this);
 
         var ResultView = new window.jermaine.Model (function () {
@@ -80,6 +88,10 @@
 
                 if (renderer !== null) {
                     this.renderer(renderer);
+                }
+
+                if (initializer !== null) {
+                    initializer.call(this);
                 }
             });
         });

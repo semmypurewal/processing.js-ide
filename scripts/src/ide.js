@@ -152,7 +152,17 @@ THE SOFTWARE.
                 $(".directory_listing").each(function (i, elt) {
                     $(elt).click(function () {
                         instance.project(new Project($(elt).attr("href")));
-                        $("#IDE-directory").toggle();
+                        $("#IDE-directory").flip({
+                            speed: 300,
+                            direction:"rl",
+                            color:"#fff",
+                            onBefore: function () {
+                                $("#IDE-directory").hide();
+                            },
+                            onEnd: function () {
+                                $("#ide").show();
+                            }
+                        })
                         return false;
                     });
                 });

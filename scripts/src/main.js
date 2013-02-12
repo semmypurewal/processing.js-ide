@@ -33,11 +33,35 @@ var main = function () {
     }));
 
     var i;
+    var titleDiv = $("#IDE-title");
 
-    //commented out temporarily
-    /*titleDiv.click(function () {
-        $("#IDE-directory").toggle();;
-    });*/
+    titleDiv.click(function () {
+        if ($("#ide").is(":visible")) {
+            $("#ide").flip({
+                speed: 300,
+                direction:"lr",
+                color:"#fff",
+                onBefore: function () {
+                    $("#ide").hide();
+                },
+                onEnd: function () {
+                    $("#IDE-directory").show();
+                }
+            });
+        } else {
+            $("#IDE-directory").flip({
+                speed: 300,
+                direction:"rl",
+                color:"#fff",
+                onBefore: function () {
+                    $("#IDE-directory").hide();
+                },
+                onEnd: function () {
+                    $("#ide").show();
+                }
+            });
+        }
+    });
 
     //RUN BUTTON CODE
     var p;  //processing object

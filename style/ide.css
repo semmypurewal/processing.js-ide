@@ -9,6 +9,7 @@ body {
 
 #ide  {
   margin: 10px auto 0 auto;
+  min-height: 500px;
 }
 
 #IDE-buttons  {
@@ -35,17 +36,33 @@ body {
 .IDE-button:hover img  {
   background: #FFFFEE;
   border: 2px dotted #A9A9A9;
-
 }
 
 #IDE-directory {
-    position:absolute;
-    top: 50px;
-    left: 100px;
-    float: right;
-    border: 5px solid black;
+    margin: 10px auto 0 auto;
+    min-height: 500px;
+    border: 1px solid #a9a9a9;
     border-radius: 5px;
-    padding: 5px;
+    padding: 20px;
+}
+
+#IDE-directory h2 {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-family: arial, sans-serif;
+    font-size: 2em;
+}
+
+#IDE-directory .project_link {
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+
+#IDE-directory a {
+    font-family: arial, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    color: #55f
 }
 
 #IDE-editor { 
@@ -71,6 +88,5 @@ body {
   font-weight: bold;
   color: #999999;
   text-align: right;
-  //temporarily commented out
-  //cursor: pointer;
+  cursor: pointer;
 }

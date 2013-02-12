@@ -15,8 +15,9 @@
     </script>
 
     <script id="directory-template" type="text/x-handelbars-template">
+      <h2>Your Sketches</h2>
       {{#each project}}
-      <div><a class="directory_listing" href="{{directory}}/{{url}}">{{title}}</a></div>
+      <div class="project_link"><a class="directory_listing" href="{{directory}}/{{url}}">{{title}}</a></div>
       {{/each}}
     </script>
   </head>
@@ -31,17 +32,20 @@
 
     <img id="logo" src="images/processing_ide_logo.png" />
 
+    <div id="IDE-message">&nbsp</div>
+    <div id="IDE-title">&nbsp</div>
+
     <div id="ide">
-      <div id="IDE-message">&nbsp</div>
-      <div id="IDE-title">&nbsp</div>
       <div id="IDE-buttons">&nbsp</div>
       <div id="IDE-editor">&nbsp</div>
-      <div id="IDE-directory" style="display: none;"></div>
     </div>
+
+    <div id="IDE-directory" style="display: none;"></div>
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.min.js" charset="utf-8"></script>
 
+    <script type="text/javascript" src="scripts/lib/flip/jquery.flip.js" charset="utf-8"></script>
 
     <script type="text/javascript" src="scripts/lib/ace-builds/src/ace.js" charset="utf-8"></script>
     <script type="text/javascript" src="scripts/lib/ace-builds/src/theme-eclipse.js" charset="utf-8"></script>
@@ -56,8 +60,7 @@
     <script type="text/javascript" src="scripts/lib/jermaine/build/jermaine.js" charset="utf-8"></script>
 
     <script type="text/javascript" src="scripts/src/jermaine-views.js" charset="utf-8"></script>
-
-    <script type="text/javascript" src="scripts/src/IDE.js" charset="utf-8"></script>
+    <script type="text/javascript" src="scripts/src/ide.js" charset="utf-8"></script>
     <script type="text/javascript" src="scripts/src/main.js" charset="utf-8"></script>
   </body>
 </html>

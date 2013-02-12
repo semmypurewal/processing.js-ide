@@ -1,3 +1,6 @@
 [submodule "scripts/lib/jermaine"]
 	path = scripts/lib/jermaine
 	url = https://github.com/semmypurewal/jermaine.git
+[submodule "javascripts/lib/jermaine"]
+	path = javascripts/lib/jermaine
+	url = https://github.com/semmypurewal/jermaine.git

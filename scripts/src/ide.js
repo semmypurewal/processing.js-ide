@@ -21,52 +21,6 @@ THE SOFTWARE.
 **/
 
 (function (window)  {
-    ////////////// WILL EVENTUALLY BE MOVED TO JERMAINE //////////////////
-    var View = new window.jermaine.Model(function () {
-        var watchers = {};
-
-        this.hasAn("instance");
-        this.hasA("renderer").which.isA("function");
-
-        this.respondsTo("render", function () {
-            return this.renderer()(this.instance().toJSON());
-        });
-
-        this.respondsTo("watch", function (attribute, responder) {
-            watchers[attribute] = responder;
-        });
-
-        this.isBuiltWith("instance", "%renderer", function () {
-            var that = this;
-
-            //it's possible this is called with an empty constructor,
-            //so instance could be undefined
-            if (this.instance() !== undefined) {
-                this.instance().on("change", function(data) {
-                    var i;
-                    var key = "";
-                    for (i = data.length-1; i >= 0; i--) {
-                        key += data[i].key;
-                        if (i !== 0) {
-                            key += ".";
-                        }
-                    }
-
-                    if (watchers[key] !== undefined) {
-                        //do something with the new value
-
-                        //note we sent in 'that' because in the view, this
-                        //should point to the view itself, not the model
-                        watchers[key].call(that, data[0].value);
-                    }
-                });
-            }
-        });
-    });
-    ////////////// END WILL EVENTUALLY BE MOVED TO JERMAINE //////////////////
-
-
-
     //////////////// BUTTON /////////////////////
     var Button = new window.jermaine.Model(function () {
         this.hasA("name").which.isA("string");
@@ -74,7 +28,7 @@ THE SOFTWARE.
         this.hasA("handler").which.isA("function");
 
         this.hasA("view").which.validatesWith(function (v) {
-            return v instanceof View;
+            return v instanceof window.jermaine.BaseView;
         });
 
         this.isBuiltWith("name", "imageURL", "handler", function () {
@@ -83,15 +37,10 @@ THE SOFTWARE.
         });
     });
 
-    var ButtonView = new window.jermaine.Model(function () {
-        var that = this;
-        this.isA(View);
-
+    var ButtonView = new window.jermaine.View(function () {
         var buttonTemplate = Handlebars.compile($("#button-template").html());
-
-        this.isBuiltWith("instance", function () {
-            that.parent.apply(this, [this.instance(), function (jsonRep) {
-                return buttonTemplate(jsonRep) }]);
+        this.rendersWith(function (jsonRep) {
+            return buttonTemplate(jsonRep);
         });
     });
     //////////////// BUTTON /////////////////////
@@ -156,108 +105,62 @@ THE SOFTWARE.
         });
     });
 
-    var ViewWrapper = function (specification) {
-        var watchers = {},
-            modified = false,
-            renderer = null;
-
-        this.rendersWith = function (r) {
-            renderer = r;
-        };
-
-        this.watches = function (attribute, responder) {
-            watchers[attribute] = responder;
-        };
-
-        var ResultView = new window.jermaine.Model (function () {
-            var that = this;
-
-            this.isA(View);
-
-            this.isBuiltWith("instance", function () {
-                var key;
-
-                that.parent.apply(this, [this.instance()]);
-
-                for (key in watchers) {
-                    this.watch(key, watchers[key]);
-                };
-
-                if (renderer !== null) {
-                    this.rendersWith(renderer);
-                }
-            });
-        });
-
-        return ResultView;
-    };
-
-    var IDEView = new window.jermaine.Model (function () {
-        var that = this;
-
+    var IDEView = new window.jermaine.View (function () {
         var messageTimer,
             messageTimeout = 5000;
-        
-        this.isA(View);
 
-        this.isBuiltWith("instance", function () {
-            //call parent constructor
-            that.parent.apply(this, [this.instance()]);
-
-            this.watch("messages", function (newMessage) {
-                if (messageTimer !== null) {
-                    clearTimeout(messageTimer);
-                }
+        this.watches("messages", function (newMessage) {
+            if (messageTimer !== null) {
+                clearTimeout(messageTimer);
+            }
             
-                $("#IDE-message").css("display", "none");
-                $("#IDE-message").text(newMessage);
-                $("#IDE-message").fadeIn();
+            $("#IDE-message").css("display", "none");
+            $("#IDE-message").text(newMessage);
+            $("#IDE-message").fadeIn();
+            
+            messageTimer = setTimeout(function()  {
+                $("#IDE-message").fadeOut();
+            }, messageTimeout);
+        });
+
+        this.watches("project.title", function (newTitle) {
+            $("#IDE-title").text(newTitle);
+        });
+        
+        this.watches("project.source", function (newSource) {
+            this.instance().editor().getSession().setValue(newSource);
+        });
+        
+        this.watches("buttons", function (newButton) {
+            var button = $(newButton.view().render());
+            //add click function
+            button.click(function () {
+                newButton.handler()();
+            });
+            $("#IDE-buttons").append(button);
+        });
+
+        this.watches("directory", function (newDirectory) {
+            var instance = this.instance();
+            $.getJSON(newDirectory, function (result) {
+                var directoryTemplate = Handlebars.compile($("#directory-template").html());
+                for (i = 0; i < result.length; ++i) {
+                    result[i]["directory"] = newDirectory.match(/(.*)\/[A-Za-z0-9]*.json/)[1];
+                }
+                $("#IDE-directory").append(directoryTemplate({project:result}));
                 
-                messageTimer = setTimeout(function()  {
-                    $("#IDE-message").fadeOut();
-                }, messageTimeout);
-            });
-
-            this.watch("project.title", function (newTitle) {
-                $("#IDE-title").text(newTitle);
-            });
-
-            this.watch("project.source", function (newSource) {
-                this.instance().editor().getSession().setValue(newSource);
-            });
-
-            this.watch("buttons", function (newButton) {
-                var button = $(newButton.view().render());
-                //add click function
-                button.click(function () {
-                    newButton.handler()();
-                });
-                $("#IDE-buttons").append(button);
-            });
-
-            this.watch("directory", function (newDirectory) {
-                var instance = this.instance();
-                $.getJSON(newDirectory, function (result) {
-                    var directoryTemplate = Handlebars.compile($("#directory-template").html());
-                    for (i = 0; i < result.length; ++i) {
-                        result[i]["directory"] = newDirectory.match(/(.*)\/[A-Za-z0-9]*.json/)[1];
-                    }
-                    $("#IDE-directory").append(directoryTemplate({project:result}));
-                    
-                    $(".directory_listing").each(function (i, elt) {
-                        console.log($(elt).attr("href"));
-                        $(elt).click(function () {
-                            instance.project(new Project($(elt).attr("href")));
-                            $("#IDE-directory").toggle();
-                            return false;
-                        });
+                $(".directory_listing").each(function (i, elt) {
+                    console.log($(elt).attr("href"));
+                    $(elt).click(function () {
+                        instance.project(new Project($(elt).attr("href")));
+                        $("#IDE-directory").toggle();
+                        return false;
                     });
                 });
             });
         });
     });
     //////////////// IDE /////////////////////////
-
 
     window.IDE = IDE;
     window.Project = Project;

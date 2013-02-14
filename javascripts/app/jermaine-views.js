@@ -56,23 +56,9 @@
             renderer = null,
             initializer = null,
             view,
-            obj = {};
+            ResultView;
 
-        this.rendersWith = function (r) {
-            renderer = r;
-        };
-
-        this.watches = function (a, r) {
-            watchers[a] = r;
-        };
-
-        this.initializesWith = function (init) {
-            initializer = init;
-        };
-        
-        specification.call(this);
-
-        var ResultView = new window.jermaine.Model (function () {
+        ResultView = new window.jermaine.Model (function () {
             var that = this;
 
             this.isA(window.jermaine.BaseView);
@@ -95,6 +81,20 @@
                 }
             });
         });
+
+        ResultView.rendersWith = function (r) {
+            renderer = r;
+        }
+
+        ResultView.watches = function (a, r) {
+            watchers[a] = r;
+        }
+
+        ResultView.initializesWith = function (init) {
+            initializer = init;
+        }
+
+        specification.call(ResultView);
 
         return ResultView;
     };

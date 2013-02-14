@@ -111,38 +111,43 @@ THE SOFTWARE.
             toggleEditorAndDirectory;
 
 
+        this.respondsTo("sayHello", function () {
+            console.log("hello");
+        });
+
+        this.respondsTo("toggleEditorAndDirectory", function () {
+            var that = this;
+            var direction = $("#ide").is(":visible")?"lr":"rl";
+            var elementA = $("#ide").is(":visible")?$("#ide"):$("#IDE-directory");
+            var elementB = $("#ide").is(":visible")?$("#IDE-directory"):$("#ide");
+            
+            elementA.flip({
+                speed: 200,
+                direction:direction,
+                color:"#fff",
+                onBefore: function () {
+                    elementA.hide();
+                },
+                onEnd: function () {
+                    elementB.show();
+                    
+                    //this is a hack to force Ace to update when the editor
+                    //becomes visible again
+                    if ($("#ide").is(":visible")) {
+                        that.instance().editor().setValue(that.instance().editor().getValue());
+                        that.instance().editor().gotoLine(0,0);
+                    }
+                    
+                }
+            });
+        });
+
+
 
         this.initializesWith(function () {
             var that = this;
 
 
-            toggleEditorAndDirectory = function () {
-                var direction = $("#ide").is(":visible")?"lr":"rl";
-                var elementA = $("#ide").is(":visible")?$("#ide"):$("#IDE-directory");
-                var elementB = $("#ide").is(":visible")?$("#IDE-directory"):$("#ide");
-                
-                elementA.flip({
-                    speed: 200,
-                    direction:direction,
-                    color:"#fff",
-                    onBefore: function () {
-                        elementA.hide();
-                    },
-                    onEnd: function () {
-                        elementB.show();
-
-                        //this is a hack to force Ace to update when the editor
-                        //becomes visible again
-                        if ($("#ide").is(":visible")) {
-                            that.instance().editor().setValue(that.instance().editor().getValue());
-                            that.instance().editor().gotoLine(0,0);
-                        }
-
-                    }
-                });
-
-
-            };
 
             //add run button
             this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
@@ -204,7 +209,7 @@ THE SOFTWARE.
 
             //set up the click responder on the title
             $("#IDE-title").click(function () {
-                toggleEditorAndDirectory();
+                that.toggleEditorAndDirectory();
             });            
         });
 
@@ -241,7 +246,8 @@ THE SOFTWARE.
         });
 
         this.watches("directory", function (newDirectory) {
-            var instance = this.instance();
+            var instance = this.instance(),
+                that = this;
             $.getJSON(newDirectory, function (result) {
                 var directoryTemplate = Handlebars.compile($("#directory-template").html());
                 for (i = 0; i < result.length; ++i) {
@@ -255,7 +261,7 @@ THE SOFTWARE.
                         $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active");
                         $(elt).addClass("active");
                         instance.project(new Project($(elt).find("a").attr("href")));
-                        //toggleEditorAndDirectory();
+                        that.toggleEditorAndDirectory();
                         return false;
                     });
                 });

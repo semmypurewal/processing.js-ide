@@ -22,8 +22,8 @@ THE SOFTWARE.
 
 var main = function () {
     //set up ide model
-    var ide = new window.IDE(new Project("sketches/hello.json"));
-    ide.directory("sketches.json");
+    var ide = new window.IDE("sketches.json");
+    //ide.directory("sketches.json");
 };
 
 $(document).ready(main);

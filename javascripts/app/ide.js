@@ -86,7 +86,7 @@ THE SOFTWARE.
 
         this.hasA("view");
 
-        this.isBuiltWith("%project", function () {
+        this.isBuiltWith("directory", function () {
             //create new java mode
             var javaMode = require("ace/mode/java").Mode;
             
@@ -97,9 +97,9 @@ THE SOFTWARE.
             this.editor().setHighlightActiveLine(false);
             this.editor().renderer.setShowPrintMargin(false);
 
-            if (this.project() !== undefined) {
+            /*if (this.project() !== undefined) {
                 this.editor().getSession().setValue(this.project().source());
-            }
+            }*/
             
             this.view(new IDEView(this));
         });
@@ -259,6 +259,7 @@ THE SOFTWARE.
                         return false;
                     });
                 });
+                instance.project(result[0].url);
             });
         });
     });

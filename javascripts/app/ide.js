@@ -70,24 +70,6 @@ THE SOFTWARE.
     //////////////// PROJECT /////////////////////
 
     //////////////// IDE /////////////////////////
-    var toggleEditorAndDirectory = function () {
-        var direction = $("#ide").is(":visible")?"lr":"rl";
-        var elementA = $("#ide").is(":visible")?$("#ide"):$("#IDE-directory");
-        var elementB = $("#ide").is(":visible")?$("#IDE-directory"):$("#ide");
-
-        elementA.flip({
-            speed: 200,
-            direction:direction,
-            color:"#fff",
-            onBefore: function () {
-                elementA.hide();
-            },
-            onEnd: function () {
-                elementB.show();
-            }
-        });
-    };
-
     var IDE = new window.jermaine.Model (function () {
         this.hasAn("editor").which.isImmutable();
         this.hasA("directory").which.isA("string");
@@ -125,10 +107,43 @@ THE SOFTWARE.
 
     var IDEView = new window.jermaine.View (function () {
         var messageTimer,
-            messageTimeout = 5000;
+            messageTimeout = 5000,
+            toggleEditorAndDirectory;
+
+
 
         this.initializesWith(function () {
             var that = this;
+
+
+            toggleEditorAndDirectory = function () {
+                var direction = $("#ide").is(":visible")?"lr":"rl";
+                var elementA = $("#ide").is(":visible")?$("#ide"):$("#IDE-directory");
+                var elementB = $("#ide").is(":visible")?$("#IDE-directory"):$("#ide");
+                
+                elementA.flip({
+                    speed: 200,
+                    direction:direction,
+                    color:"#fff",
+                    onBefore: function () {
+                        elementA.hide();
+                    },
+                    onEnd: function () {
+                        elementB.show();
+                        console.log($("#ide").is(":visible"));
+
+                        //this is a hack to force Ace to update when the editor
+                        //becomes visible again
+                        if ($("#ide").is(":visible")) {
+                            that.instance().editor().setValue(that.instance().editor().getValue());
+                            that.instance().editor().gotoLine(0,0);
+                        }
+
+                    }
+                });
+
+
+            };
 
             //add run button
             this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
@@ -232,13 +247,18 @@ THE SOFTWARE.
                 var directoryTemplate = Handlebars.compile($("#directory-template").html());
                 for (i = 0; i < result.length; ++i) {
                     result[i]["directory"] = "sketches";
+                    result[i]["name"] = result[i]["url"].match(/(.*).json/)[1];
                 }
                 $("#IDE-directory").append(directoryTemplate({project:result}));
+
+                $("#IDE-directory #" + instance.project().url().match(/\/(.*)\.json/)[1]).addClass("active");
                 
                 $(".directory_listing").each(function (i, elt) {
                     $(elt).click(function () {
+                        $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active");
+                        $("#"+$(elt).attr("href").match(/\/(.*)\.json/)[1]).addClass("active");
                         instance.project(new Project($(elt).attr("href")));
-                        toggleEditorAndDirectory();
+                        //toggleEditorAndDirectory();
                         return false;
                     });
                 });

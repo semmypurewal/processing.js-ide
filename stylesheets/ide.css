@@ -54,7 +54,7 @@ body {
 }
 
 #IDE-directory .project_link {
-    margin-bottom: 10px;
+    padding: 10px;
     margin-left: 20px;
 }
 
@@ -63,6 +63,11 @@ body {
     font-weight: bold;
     text-decoration: none;
     color: #55f
+}
+
+#IDE-directory .active {
+    border-radius: 5px;
+    background: #ccc;
 }
 
 #IDE-editor { 

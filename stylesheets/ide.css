@@ -40,11 +40,11 @@ body {
 
 #IDE-directory {
     margin: 10px auto 0 auto;
-    height: 450px;
-    max-height: 450px;
+    height: 470px;
+    max-height: 470px;
     overflow: scroll;
     border: 1px solid #a9a9a9;
-    border-radius: 5px;
+    border-radius: 5px 5px 0 0;
     padding: 20px;
 }
 

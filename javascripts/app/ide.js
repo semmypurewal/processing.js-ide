@@ -130,7 +130,6 @@ THE SOFTWARE.
                     },
                     onEnd: function () {
                         elementB.show();
-                        console.log($("#ide").is(":visible"));
 
                         //this is a hack to force Ace to update when the editor
                         //becomes visible again

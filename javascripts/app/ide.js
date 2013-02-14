@@ -97,10 +97,6 @@ THE SOFTWARE.
             this.editor().setHighlightActiveLine(false);
             this.editor().renderer.setShowPrintMargin(false);
 
-            /*if (this.project() !== undefined) {
-                this.editor().getSession().setValue(this.project().source());
-            }*/
-            
             this.view(new IDEView(this));
         });
     });
@@ -109,11 +105,6 @@ THE SOFTWARE.
         var messageTimer,
             messageTimeout = 5000,
             toggleEditorAndDirectory;
-
-
-        this.respondsTo("sayHello", function () {
-            console.log("hello");
-        });
 
         this.respondsTo("toggleEditorAndDirectory", function () {
             var that = this;
@@ -143,24 +134,13 @@ THE SOFTWARE.
         });
 
 
-
-        this.initializesWith(function () {
-            var that = this;
-
-
-
-            //add run button
-            this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
-                that.instance().messages().add("running program");
-                that.instance().project().source(that.instance().editor().getSession().getValue());
-                return false;
-            }));
-
+        this.respondsTo("setUpProcessingRunner", function () {
             var p;  //processing object
             var error;  //processing error
-
+            var that = this;
+            
             $("#IDE-run_button").colorbox({
-                'title' : that.instance().project().title(),
+                'title' : this.instance().project().title(),
                 'inline' : true,
                 'scrolling' : false,
                 'href':"#canvas",
@@ -171,7 +151,7 @@ THE SOFTWARE.
                     error = null;
                     
                     try  {
-                        p = new Processing(canvas, code);
+
                         var dimensions = code.match(/\s+size\((\d+),(\d+)\)/);
                         if (dimensions !== null) {
                             width = parseInt(dimensions[1]);
@@ -182,6 +162,7 @@ THE SOFTWARE.
                         }
                         $("#processing_canvas").css('width',width);
                         $("#processing_canvas").css('height',height);
+                        p = new Processing(canvas, code);
                     }
                     catch(err)  {
                         error = err;
@@ -206,6 +187,19 @@ THE SOFTWARE.
                     }
                 }
             });
+        });
+
+
+        this.initializesWith(function () {
+            var that = this;
+
+            //add run button
+            this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
+                that.instance().messages().add("running program");
+                that.instance().project().source(that.instance().editor().getSession().getValue());
+                return false;
+            }));
+
 
             //set up the click responder on the title
             $("#IDE-title").click(function () {
@@ -226,6 +220,11 @@ THE SOFTWARE.
             messageTimer = setTimeout(function()  {
                 $("#IDE-message").fadeOut();
             }, messageTimeout);
+        });
+
+        this.watches("project", function (newProject) {
+            $("#IDE-directory #" + this.instance().project().url().match(/\/(.*)\.json/)[1]).addClass("active");
+            this.setUpProcessingRunner();
         });
 
         this.watches("project.title", function (newTitle) {
@@ -255,17 +254,17 @@ THE SOFTWARE.
                     result[i]["name"] = result[i]["url"].match(/(.*).json/)[1];
                 }
                 $("#IDE-directory").append(directoryTemplate({project:result}));
-                $("#IDE-directory #" + instance.project().url().match(/\/(.*)\.json/)[1]).addClass("active");
+
                 $(".directory_listing").each(function (i, elt) {
                     $(elt).click(function () {
                         $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active");
                         $(elt).addClass("active");
                         instance.project(new Project($(elt).find("a").attr("href")));
-                        that.toggleEditorAndDirectory();
+                        //that.toggleEditorAndDirectory();
                         return false;
                     });
                 });
-                instance.project(result[0].url);
+                instance.project(new Project(result[0]["directory"] + "/" + result[0].url));
             });
         });
     });

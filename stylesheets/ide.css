@@ -40,7 +40,9 @@ body {
 
 #IDE-directory {
     margin: 10px auto 0 auto;
-    min-height: 500px;
+    height: 450px;
+    max-height: 450px;
+    overflow: scroll;
     border: 1px solid #a9a9a9;
     border-radius: 5px;
     padding: 20px;
@@ -54,6 +56,7 @@ body {
 }
 
 #IDE-directory .project_link {
+    cursor: pointer;
     padding: 10px;
     margin-left: 20px;
 }
@@ -67,7 +70,7 @@ body {
 
 #IDE-directory .active {
     border-radius: 5px;
-    background: #ccc;
+    background: #eee;
 }
 
 #IDE-editor { 

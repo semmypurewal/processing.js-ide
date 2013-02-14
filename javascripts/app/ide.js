@@ -249,14 +249,12 @@ THE SOFTWARE.
                     result[i]["name"] = result[i]["url"].match(/(.*).json/)[1];
                 }
                 $("#IDE-directory").append(directoryTemplate({project:result}));
-
                 $("#IDE-directory #" + instance.project().url().match(/\/(.*)\.json/)[1]).addClass("active");
-                
                 $(".directory_listing").each(function (i, elt) {
                     $(elt).click(function () {
                         $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active");
-                        $("#"+$(elt).attr("href").match(/\/(.*)\.json/)[1]).addClass("active");
-                        instance.project(new Project($(elt).attr("href")));
+                        $(elt).addClass("active");
+                        instance.project(new Project($(elt).find("a").attr("href")));
                         //toggleEditorAndDirectory();
                         return false;
                     });

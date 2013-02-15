@@ -6,6 +6,5 @@
             "name":"main.pde",
             "source":"// global variables go here\n\nvoid setup()  {\n    size(400,400);\n    background(125);\n    fill(255);\n    noLoop();\n    PFont fontA = loadFont(\"arial\");\n    textFont(fontA, 14);\n}\n\nvoid draw() {\n    String s = \"Have a nice day!\";\n\n    strokeWeight(5);\n\n    fill(255,255,0);\n   ellipse(width/2,height/2,80,80);\n\n    fill(0);\n    ellipse(width/2-17,height/2-17,5,5);\n    ellipse(width/2+17,height/2-17,5,5);\n\n    noFill();\n\n    arc(width/2,height/2,50,50, 0, PI);\n    textSize(40);\n    text(s,width/2 - textWidth(s)/2,35);\n}"
         }
-    ],
-    "source":"// global variables go here\n\nvoid setup()  {\n    size(400,400);\n    background(125);\n    fill(255);\n    noLoop();\n    PFont fontA = loadFont(\"arial\");\n    textFont(fontA, 14);\n}\n\nvoid draw() {\n    String s = \"Have a nice day!\";\n\n    strokeWeight(5);\n\n    fill(255,255,0);\n   ellipse(width/2,height/2,80,80);\n\n    fill(0);\n    ellipse(width/2-17,height/2-17,5,5);\n    ellipse(width/2+17,height/2-17,5,5);\n\n    noFill();\n\n    arc(width/2,height/2,50,50, 0, PI);\n    textSize(40);\n    text(s,width/2 - textWidth(s)/2,35);\n}"
+    ]
 }

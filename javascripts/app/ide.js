@@ -61,7 +61,6 @@ THE SOFTWARE.
     //////////////// PROJECT /////////////////////
     var Project = new window.jermaine.Model(function () {
         this.hasA("title").which.isA("string");
-        this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
         this.hasA("url").which.isA("string");
 
         this.hasMany("sources").eachOfWhich.validatesWith(function (file) {
@@ -73,12 +72,10 @@ THE SOFTWARE.
                 i;
             if (this.url()) {
                 $.getJSON(this.url(), function(result) {
-                    if (!result.title || !result.source) {
+                    if (!result.title || !result.sources) {
                         throw new Error("invalid project object");
                     } else {
                         that.title(result.title);
-                        //that.source(result.source);
-
                         for (i = 0; i < result.sources.length; ++i) {
                             that.sources().add(new SourceFile(result.sources[i].name, result.sources[i].source));
                         }
@@ -231,7 +228,6 @@ THE SOFTWARE.
             //add run button
             this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
                 that.instance().messages().add("running program");
-                that.instance().project().source(that.instance().editor().getSession().getValue());
                 return false;
             }));
 
@@ -293,10 +289,6 @@ THE SOFTWARE.
             that.setTab(0);
         });
 
-        this.watches("project.source", function (newSource) {
-            //this.instance().editor().getSession().setValue(newSource);
-        });
-        
         this.watches("buttons", function (newButton) {
             var button = $($.parseHTML(newButton.view().render()));
             //add click function

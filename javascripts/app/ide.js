@@ -271,6 +271,4 @@ THE SOFTWARE.
     //////////////// IDE /////////////////////////
 
     window.IDE = IDE;
-    window.Project = Project;
-    window.Button = Button;
 })(window);

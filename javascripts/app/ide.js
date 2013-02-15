@@ -21,6 +21,8 @@ THE SOFTWARE.
 **/
 
 (function (window)  {
+    var EditSession = require("ace/edit_session").EditSession;
+
     //////////////// BUTTON /////////////////////
     var Button = new window.jermaine.Model(function () {
         this.hasA("name").which.isA("string");
@@ -51,6 +53,8 @@ THE SOFTWARE.
         this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
         this.hasA("url").which.isA("string");
 
+        this.hasMany("sources").eachOfWhich.isA("string");
+
         this.isBuiltWith("%url", function () {
             var that = this;
             if (this.url()) {
@@ -59,7 +63,11 @@ THE SOFTWARE.
                         throw new Error("invalid project object");
                     } else {
                         that.title(result.title);
-                        that.source(result.source);
+                        //that.source(result.source);
+
+                        that.sources().add(result.source);
+                        that.sources().add("tab source 2");
+                        that.sources().add("tab source 3");
                     }
                 });
             } else {
@@ -82,6 +90,10 @@ THE SOFTWARE.
         this.hasMany("messages").eachOfWhich.isA("string");
         this.hasMany("buttons").which.validateWith(function (button) {
             return button instanceof Button;
+        });
+
+        this.hasMany("editSessions").eachOfWhich.validatesWith(function (es) {
+            return es instanceof EditSession;
         });
 
         this.hasA("view");
@@ -133,6 +145,12 @@ THE SOFTWARE.
             });
         });
 
+        this.respondsTo("setTab", function (tab) {
+            //remove the active class
+            $("#IDE-tabs > .active").removeClass("active");
+            $($("#IDE-tabs > .IDE-tab")[tab]).addClass("active");
+            this.instance().editor().setSession(this.instance().editSessions().at(tab));
+        });
 
         this.respondsTo("setUpProcessingRunner", function () {
             var p;  //processing object
@@ -189,7 +207,6 @@ THE SOFTWARE.
             });
         });
 
-
         this.initializesWith(function () {
             var that = this;
 
@@ -200,13 +217,11 @@ THE SOFTWARE.
                 return false;
             }));
 
-
             //set up the click responder on the title
             $("#IDE-title").click(function () {
                 that.toggleEditorAndDirectory();
             });            
         });
-
 
         this.watches("messages", function (newMessage) {
             if (messageTimer !== null) {
@@ -224,15 +239,45 @@ THE SOFTWARE.
 
         this.watches("project", function (newProject) {
             $("#IDE-directory #" + this.instance().project().url().match(/\/(.*)\.json/)[1]).addClass("active");
+
+            //clear out tabs so that they can be readded
+            $("#IDE-tabs").html("");
             this.setUpProcessingRunner();
         });
 
         this.watches("project.title", function (newTitle) {
+            var i,
+                count = this.instance().editSessions().size();
+
             $("#IDE-title").text(newTitle);
+
+            for (i = 0; i < count; i++) {
+                this.instance().editSessions().pop();
+
+            }
         });
         
+        /**
+         * When a source file gets added to a project, we
+         * have to add a tab
+         */
+        this.watches("project.sources", function (newSource) {
+            var tab,
+                session,
+                index = this.instance().editSessions().size(),
+                that = this;
+            session = new EditSession(newSource);
+            tab = $("<span class='IDE-tab'>Source</span>");
+            this.instance().editSessions().add(session);
+            $("#IDE-tabs").append(tab);
+            tab.click(function () {
+                that.setTab(index);
+            });
+            that.setTab(0);
+        });
+
         this.watches("project.source", function (newSource) {
-            this.instance().editor().getSession().setValue(newSource);
+            //this.instance().editor().getSession().setValue(newSource);
         });
         
         this.watches("buttons", function (newButton) {

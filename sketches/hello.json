@@ -1,1 +1,10 @@
-{"title":"hello web","source":"// comments go here\nvoid setup() {\n    size(200,200);\n    background(125);\n    fill(255);\n    noLoop();\n    PFont fontA = loadFont(\"courier\");\n    textFont(fontA, 14);\n}\n\nvoid draw() {\n    text(\"Hello Web!\",20,20);\n    println(\"Hello ErrorLog!\");\n}"}
+{
+    "title":"hello web",
+    "sources":[
+        {
+            "name":"hello.pde",
+            "source":"// comments go here\nvoid setup() {\n    size(200,200);\n    background(125);\n    fill(255);\n    noLoop();\n    PFont fontA = loadFont(\"courier\");\n    textFont(fontA, 14);\n}\n\nvoid draw() {\n    text(\"Hello Web!\",20,20);\n    println(\"Hello ErrorLog!\");\n}"
+        }
+    ],
+    "source":"// comments go here\nvoid setup() {\n    size(200,200);\n    background(125);\n    fill(255);\n    noLoop();\n    PFont fontA = loadFont(\"courier\");\n    textFont(fontA, 14);\n}\n\nvoid draw() {\n    text(\"Hello Web!\",20,20);\n    println(\"Hello ErrorLog!\");\n}"
+}

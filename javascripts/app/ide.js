@@ -47,16 +47,30 @@ THE SOFTWARE.
     });
     //////////////// BUTTON /////////////////////
 
+    //////////////// SOURCE FILE ///////////////
+    var SourceFile = new window.jermaine.Model(function () {
+        this.hasA("name").which.isA("string");
+        this.hasA("source").which.isA("string");
+        this.isBuiltWith("name", "source");
+        
+    });
+
+    //////////////// SOURCE FILE ///////////////
+
+
     //////////////// PROJECT /////////////////////
     var Project = new window.jermaine.Model(function () {
         this.hasA("title").which.isA("string");
         this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
         this.hasA("url").which.isA("string");
 
-        this.hasMany("sources").eachOfWhich.isA("string");
+        this.hasMany("sources").eachOfWhich.validatesWith(function (file) {
+            return file instanceof SourceFile;
+        });
 
         this.isBuiltWith("%url", function () {
-            var that = this;
+            var that = this,
+                i;
             if (this.url()) {
                 $.getJSON(this.url(), function(result) {
                     if (!result.title || !result.source) {
@@ -65,9 +79,9 @@ THE SOFTWARE.
                         that.title(result.title);
                         //that.source(result.source);
 
-                        that.sources().add(result.source);
-                        that.sources().add("tab source 2");
-                        that.sources().add("tab source 3");
+                        for (i = 0; i < result.sources.length; ++i) {
+                            that.sources().add(new SourceFile(result.sources[i].name, result.sources[i].source));
+                        }
                     }
                 });
             } else {
@@ -163,8 +177,12 @@ THE SOFTWARE.
                 'scrolling' : false,
                 'href':"#canvas",
                 'onLoad' : function()  {
-                    var width, height;
-                    var code = that.instance().project().source();
+                    var width, height, i;
+                    var code = "";
+                    //var code = that.instance().project().source();
+                    for (i = 0; i < that.instance().project().sources().size(); i++) {
+                        code += that.instance().project().sources().at(i).source();
+                    }
                     var canvas = document.getElementById("processing_canvas");
                     error = null;
                     
@@ -253,7 +271,6 @@ THE SOFTWARE.
 
             for (i = 0; i < count; i++) {
                 this.instance().editSessions().pop();
-
             }
         });
         
@@ -266,8 +283,8 @@ THE SOFTWARE.
                 session,
                 index = this.instance().editSessions().size(),
                 that = this;
-            session = new EditSession(newSource);
-            tab = $("<span class='IDE-tab'>Source</span>");
+            session = new EditSession(newSource.source());
+            tab = $("<span class='IDE-tab'>"+newSource.name()+"</span>");
             this.instance().editSessions().add(session);
             $("#IDE-tabs").append(tab);
             tab.click(function () {

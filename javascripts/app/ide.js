@@ -92,7 +92,6 @@ THE SOFTWARE.
     var IDE = new window.jermaine.Model (function () {
         this.hasAn("editor").which.isImmutable();
         this.hasA("directory").which.isA("string");
-        this.hasMany("projects");
 
         this.hasA("project").which.validatesWith(function (project) {
             return project instanceof Project;
@@ -110,13 +109,9 @@ THE SOFTWARE.
         this.hasA("view");
 
         this.isBuiltWith("directory", function () {
-            //create new java mode
-            var javaMode = require("ace/mode/java").Mode;
-            
             //initialize editor as ace editor
             this.editor(ace.edit("IDE-editor"));
             this.editor().setTheme("ace/theme/eclipse");
-            this.editor().getSession().setMode(new javaMode());
             this.editor().setHighlightActiveLine(false);
             this.editor().renderer.setShowPrintMargin(false);
 
@@ -141,10 +136,13 @@ THE SOFTWARE.
                 color:"#fff",
                 onBefore: function () {
                     elementA.hide();
+                    $("#IDE-title").unbind("click");
                 },
                 onEnd: function () {
                     elementB.show();
-                    
+                    $("#IDE-title").click(function () {
+                        that.toggleEditorAndDirectory();
+                    });
                     //this is a hack to force Ace to update when the editor
                     //becomes visible again
                     if ($("#ide").is(":visible")) {
@@ -161,6 +159,7 @@ THE SOFTWARE.
             $("#IDE-tabs > .active").removeClass("active");
             $($("#IDE-tabs > .IDE-tab")[tab]).addClass("active");
             this.instance().editor().setSession(this.instance().editSessions().at(tab));
+            this.instance().editor().getSession().setMode("ace/mode/java");
         });
 
         this.respondsTo("setUpProcessingRunner", function () {

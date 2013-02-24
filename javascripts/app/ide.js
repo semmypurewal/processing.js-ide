@@ -220,7 +220,7 @@ THE SOFTWARE.
         });
 
         this.watches("project", function (newProject) {
-            $("#IDE-directory #" + this.instance().project().url().match(/\/(.*)\.json/)[1]).addClass("active");
+            $("#IDE-directory #" + this.instance().project().url().match(/\/(.*)\.json/)[1]).addClass("active").removeClass("inactive");
             this.setUpProcessingRunner();
         });
 
@@ -254,8 +254,8 @@ THE SOFTWARE.
 
                 $(".directory_listing").each(function (i, elt) {
                     $(elt).click(function () {
-                        $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active");
-                        $(elt).addClass("active");
+                        $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active").addClass("inactive");
+                        $(elt).addClass("active").removeClass("inactive");
                         instance.project(new Project($(elt).find("a").attr("href")));
                         //that.toggleEditorAndDirectory();
                         return false;

@@ -55,10 +55,15 @@ body {
     font-size: 2em;
 }
 
+#IDE-directory .inactive:hover {
+    background: #efefff;
+}
+
 #IDE-directory .project_link {
     cursor: pointer;
     padding: 10px;
     margin-left: 20px;
+    border-radius: 5px;
 }
 
 #IDE-directory a {
@@ -69,7 +74,7 @@ body {
 }
 
 #IDE-directory .active {
-    border-radius: 5px;
+
     background: #eee;
 }
 

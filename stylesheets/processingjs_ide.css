@@ -19,6 +19,7 @@ body  {
     height: 30px;
     float: right;
     line-height: 30px;
+    text-align: right;
 }
 
 .admin_link  {

@@ -152,7 +152,9 @@ THE SOFTWARE.
                 'href':"#canvas",
                 'onLoad' : function()  {
                     var width, height;
-                    var code = that.instance().project().source();
+                    console.log("getting code");
+                    var code = that.instance().editor().getSession().getValue();
+                    console.log("done getting code");
                     var canvas = document.getElementById("processing_canvas");
                     error = null;
                     
@@ -222,7 +224,7 @@ THE SOFTWARE.
             //add run button
             this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
                 that.instance().messages().add("running program");
-                that.instance().project().source(that.instance().editor().getSession().getValue());
+                //that.instance().project().source(that.instance().editor().getSession().getValue());
                 return false;
             }));
 

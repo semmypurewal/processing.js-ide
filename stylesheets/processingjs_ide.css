@@ -1,7 +1,6 @@
 body  {
     font-family: arial, sans-serif;
     width: 100%;
-    background: #ffffff url('/images/header_background.png') repeat-x;
 }
 
 #container {
@@ -18,7 +17,6 @@ body  {
     font-family: helvetica, arial, sans-serif;
     width: 268px;
     height: 30px;
-    background: #ffffff url('/images/admin_header_background.png') no-repeat;
     float: right;
     line-height: 30px;
 }

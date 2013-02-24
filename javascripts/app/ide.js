@@ -71,12 +71,15 @@ THE SOFTWARE.
 
     //////////////// IDE /////////////////////////
     var IDE = new window.jermaine.Model (function () {
+
         this.hasAn("editor").which.isImmutable();
         this.hasA("directory").which.isA("string");
 
         this.hasA("project").which.validatesWith(function (project) {
             return project instanceof Project;
         });
+
+        this.hasA("changedFlag").which.isA("boolean").and.defaultsTo(false);
 
         this.hasMany("messages").eachOfWhich.isA("string");
         this.hasMany("buttons").which.validateWith(function (button) {
@@ -86,11 +89,17 @@ THE SOFTWARE.
         this.hasA("view");
 
         this.isBuiltWith("directory", function () {
+            var that = this;
+
             //initialize editor as ace editor
             this.editor(ace.edit("IDE-editor"));
             this.editor().setTheme("ace/theme/eclipse");
             this.editor().setHighlightActiveLine(false);
             this.editor().renderer.setShowPrintMargin(false);
+
+            this.editor().getSession().on("change", function () {
+                that.changedFlag(true);
+            });
 
             this.view(new IDEView(this));
         });
@@ -186,6 +195,26 @@ THE SOFTWARE.
             });
         });
 
+        this.respondsTo("addServerButtons", function () {
+            var that = this;
+
+            this.instance().buttons().add(new Button("save", "images/icons/save.png", function () {
+                var saveURL;
+
+                if (that.instance().changedFlag() === false) {
+	            that.instance().messages().add("no changes need to be saved");
+                } else {
+                    that.instance().project().source(that.instance().editor().getSession().getValue());
+
+                    saveURL = that.instance().project().url().match(/(.*).json/)[1] + "/save";
+	            $.post(saveURL, { code: that.instance().project().source()},function(response)  {
+	                that.instance().messages().add(response);
+                        that.instance().changedFlag(false);
+	            });
+                }
+            }));
+        });
+
 
         this.initializesWith(function () {
             var that = this;
@@ -201,7 +230,11 @@ THE SOFTWARE.
             //set up the click responder on the title
             $("#IDE-title").click(function () {
                 that.toggleEditorAndDirectory();
-            });            
+            });
+
+            if ($("#ide").hasClass("server")) {
+                this.addServerButtons();
+            }
         });
 
 
@@ -230,6 +263,7 @@ THE SOFTWARE.
         
         this.watches("project.source", function (newSource) {
             this.instance().editor().getSession().setValue(newSource);
+            this.instance().changedFlag(false);
         });
         
         this.watches("buttons", function (newButton) {

@@ -21,8 +21,6 @@ THE SOFTWARE.
 **/
 
 (function (window)  {
-    var EditSession = require("ace/edit_session").EditSession;
-
     //////////////// BUTTON /////////////////////
     var Button = new window.jermaine.Model(function () {
         this.hasA("name").which.isA("string");
@@ -47,38 +45,21 @@ THE SOFTWARE.
     });
     //////////////// BUTTON /////////////////////
 
-    //////////////// SOURCE FILE ///////////////
-    var SourceFile = new window.jermaine.Model(function () {
-        this.hasA("name").which.isA("string");
-        this.hasA("source").which.isA("string");
-        this.isBuiltWith("name", "source");
-        
-    });
-
-    //////////////// SOURCE FILE ///////////////
-
-
     //////////////// PROJECT /////////////////////
     var Project = new window.jermaine.Model(function () {
         this.hasA("title").which.isA("string");
+        this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
         this.hasA("url").which.isA("string");
 
-        this.hasMany("sources").eachOfWhich.validatesWith(function (file) {
-            return file instanceof SourceFile;
-        });
-
         this.isBuiltWith("%url", function () {
-            var that = this,
-                i;
+            var that = this;
             if (this.url()) {
                 $.getJSON(this.url(), function(result) {
-                    if (!result.title || !result.sources) {
+                    if (!result.title || !result.source) {
                         throw new Error("invalid project object");
                     } else {
                         that.title(result.title);
-                        for (i = 0; i < result.sources.length; ++i) {
-                            that.sources().add(new SourceFile(result.sources[i].name, result.sources[i].source));
-                        }
+                        that.source(result.source);
                     }
                 });
             } else {
@@ -100,10 +81,6 @@ THE SOFTWARE.
         this.hasMany("messages").eachOfWhich.isA("string");
         this.hasMany("buttons").which.validateWith(function (button) {
             return button instanceof Button;
-        });
-
-        this.hasMany("editSessions").eachOfWhich.validatesWith(function (es) {
-            return es instanceof EditSession;
         });
 
         this.hasA("view");
@@ -154,14 +131,6 @@ THE SOFTWARE.
             });
         });
 
-        this.respondsTo("setTab", function (tab) {
-            //remove the active class
-            $("#IDE-tabs > .active").removeClass("active");
-            $($("#IDE-tabs > .IDE-tab")[tab]).addClass("active");
-            this.instance().editor().setSession(this.instance().editSessions().at(tab));
-            this.instance().editor().getSession().setMode("ace/mode/java");
-        });
-
         this.respondsTo("setUpProcessingRunner", function () {
             var p;  //processing object
             var error;  //processing error
@@ -173,12 +142,8 @@ THE SOFTWARE.
                 'scrolling' : false,
                 'href':"#canvas",
                 'onLoad' : function()  {
-                    var width, height, i;
-                    var code = "";
-                    //var code = that.instance().project().source();
-                    for (i = 0; i < that.instance().project().sources().size(); i++) {
-                        code += that.instance().project().sources().at(i).source();
-                    }
+                    var width, height;
+                    var code = that.instance().project().source();
                     var canvas = document.getElementById("processing_canvas");
                     error = null;
                     
@@ -221,20 +186,24 @@ THE SOFTWARE.
             });
         });
 
+
         this.initializesWith(function () {
             var that = this;
 
             //add run button
             this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
                 that.instance().messages().add("running program");
+                that.instance().project().source(that.instance().editor().getSession().getValue());
                 return false;
             }));
+
 
             //set up the click responder on the title
             $("#IDE-title").click(function () {
                 that.toggleEditorAndDirectory();
             });            
         });
+
 
         this.watches("messages", function (newMessage) {
             if (messageTimer !== null) {
@@ -252,42 +221,17 @@ THE SOFTWARE.
 
         this.watches("project", function (newProject) {
             $("#IDE-directory #" + this.instance().project().url().match(/\/(.*)\.json/)[1]).addClass("active");
-
-            //clear out tabs so that they can be readded
-            $("#IDE-tabs").html("");
             this.setUpProcessingRunner();
         });
 
         this.watches("project.title", function (newTitle) {
-            var i,
-                count = this.instance().editSessions().size();
-
             $("#IDE-title").text(newTitle);
-
-            for (i = 0; i < count; i++) {
-                this.instance().editSessions().pop();
-            }
         });
         
-        /**
-         * When a source file gets added to a project, we
-         * have to add a tab
-         */
-        this.watches("project.sources", function (newSource) {
-            var tab,
-                session,
-                index = this.instance().editSessions().size(),
-                that = this;
-            session = new EditSession(newSource.source());
-            tab = $("<span class='IDE-tab'>"+newSource.name()+"</span>");
-            this.instance().editSessions().add(session);
-            $("#IDE-tabs").append(tab);
-            tab.click(function () {
-                that.setTab(index);
-            });
-            that.setTab(0);
+        this.watches("project.source", function (newSource) {
+            this.instance().editor().getSession().setValue(newSource);
         });
-
+        
         this.watches("buttons", function (newButton) {
             var button = $($.parseHTML(newButton.view().render()));
             //add click function

@@ -1,5 +1,3 @@
-[
-    {"title":"Balloons Floating into Spikes", "url":"balloons.json"},
-    {"title":"hello web", "url":"hello.json"},
-    {"title":"have a nice day", "url":"nice_day.json"}
-]
+[ {"title":"hello web", "url":"hello.json"},
+  {"title":"Balloons Floating into Spikes", "url":"balloons.json"},
+  {"title":"have a nice day", "url":"nice_day.json"}]

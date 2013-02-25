@@ -87,9 +87,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 'href':"#canvas",
                 'onLoad' : function()  {
                     var width, height;
-                    console.log("getting code");
                     var code = that.instance().editor().getSession().getValue();
-                    console.log("done getting code");
                     var canvas = document.getElementById("processing_canvas");
                     error = null;
                     

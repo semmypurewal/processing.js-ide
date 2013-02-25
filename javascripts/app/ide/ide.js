@@ -4,7 +4,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
 
     //////////////// IDE MODEL /////////////////////////
     var IDE = new window.jermaine.Model (function () {
-
         this.hasAn("editor").which.isImmutable();
         this.hasA("directory").which.isA("string");
 
@@ -44,6 +43,16 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         var messageTimer,
             messageTimeout = 5000,
             toggleEditorAndDirectory;
+
+        this.respondsTo("createNewSketch", function (name) {
+            var menuEntry = $("<div id='whatever' class='project_link directory_listing inactive'><a href='whatever/whatever'>"+name+"</a></div>");
+            menuEntry.hide();
+            menuEntry.insertAfter("#new_sketch_div");
+            $("#new_sketch_div").fadeOut(function () {
+                $("#new_sketch_input").val("");
+                menuEntry.fadeIn();
+            });
+        });
 
         this.respondsTo("toggleEditorAndDirectory", function () {
             var that = this;
@@ -212,6 +221,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         this.watches("directory", function (newDirectory) {
             var instance = this.instance(),
                 that = this;
+
             $.getJSON(newDirectory, function (result) {
                 var directoryTemplate = Handlebars.compile($("#directory-template").html());
                 for (i = 0; i < result.length; ++i) {
@@ -230,6 +240,24 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     });
                 });
                 instance.project(new Project(result[0]["directory"] + "/" + result[0].url));
+
+                if ($("#ide").hasClass("server")) {
+                    $("#new_sketch_button").click(function () {
+                        if ($("#new_sketch_div").is(":visible")) {
+                            $("#new_sketch_div").slideUp(function () {
+                                $("#new_sketch_input").val("");
+                            });
+                        } else {
+                            $("#new_sketch_div").slideDown();
+                        }
+                    });
+
+                    $("#new_sketch_input").keypress(function (e) {
+                        if (e.keyCode === 13 && $(this).val() !== "" ) {
+                            that.createNewSketch($(this).val());
+                        }
+                    });
+                }
             });
         });
     });

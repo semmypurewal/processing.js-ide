@@ -55,6 +55,14 @@ body {
     font-size: 2em;
 }
 
+#IDE-directory #new_sketch_button  {
+    cursor: pointer;
+}
+
+#IDE-directory #new_sketch_button {
+    color: blue;
+}
+
 #IDE-directory .inactive:hover {
     background: #efefff;
 }

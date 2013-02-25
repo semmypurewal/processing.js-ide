@@ -15,10 +15,13 @@
     </script>
 
     <script id="directory-template" type="text/x-handelbars-template">
-      <h2>Your Sketches</h2>
-      {{#each project}}
-      <div id="{{name}}" class="project_link directory_listing inactive"><a href="{{directory}}/{{url}}">{{title}}</a></div>
-      {{/each}}
+      <h2>Your Sketches <span id="new_sketch_button">[+]</span></h2>
+      <div id="directory">
+        <div id="new_sketch_div" class="project_link inactive" style="display:none"><input id="new_sketch_input" placeholder="enter a name for your new sketch" size="50"/></div>
+        {{#each project}}
+        <div id="{{name}}" class="project_link directory_listing inactive"><a href="{{directory}}/{{url}}">{{title}}</a></div>
+        {{/each}}
+      </div>
     </script>
   </head>
 

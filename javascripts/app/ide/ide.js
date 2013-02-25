@@ -44,6 +44,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             messageTimeout = 5000,
             toggleEditorAndDirectory;
 
+        this.respondsTo("deleteSketch", function (name) {
+            
+        });
+
         this.respondsTo("createNewSketch", function (name) {
             var that = this;
             var instance = this.instance();
@@ -277,6 +281,11 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         if (e.keyCode === 13 && $(this).val() !== "" ) {
                             that.createNewSketch($(this).val());
                         }
+                    });
+
+                    $(".delete_sketch_button").click(function () {
+                        ($(this).parent("div").attr("id"));
+                        return false;
                     });
                 }
             });

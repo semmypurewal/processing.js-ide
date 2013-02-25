@@ -45,7 +45,21 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             toggleEditorAndDirectory;
 
         this.respondsTo("deleteSketch", function (name) {
-            
+            var instance = this.instance();
+            if(confirm("Are you sure you want to delete '"+name+"'?"))  {
+                $.post("sketches/"+name+"/delete", function (response) {
+                    if ($("#"+name).hasClass("active")) {
+                        if ($("#"+name).next("div.inactive").size() > 0) {
+                            $("#"+name).next("div.inactive").trigger("click");
+                        } else if ($("#"+name).prev("div.inactive").size() > 0) {
+                            $("#"+name).prev("div.inactive").trigger("click");
+                        }
+                    }
+                    $("#"+name).fadeOut(function () {
+                        $("#"+name).remove();
+                    });
+                });
+            }
         });
 
         this.respondsTo("createNewSketch", function (name) {
@@ -54,9 +68,16 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             $.post("sketches/new", {"title":name}, function (sketch) {
                 if (typeof (sketch) === "object") {
                     var menuEntry = $("<div id='"+sketch.slug+"' class='project_link directory_listing inactive'>"+
-                                      "<a href='sketches/"+sketch.slug+".json'>"+name+"</a></div>");
+                                      "<a href='sketches/"+sketch.slug+".json'>"+name+"</a> <span class='delete_sketch_button'>[-]</span></div>");
                     menuEntry.hide();
+
                     menuEntry.insertAfter("#new_sketch_div");
+                    //duplicate code
+                    menuEntry.children("span").click(function () {
+                        that.deleteSketch($(this).parent("div").attr("id"));
+                        return false;
+                    });
+
                     menuEntry.click(function () {
                         $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active").addClass("inactive");
                         $(this).addClass("active").removeClass("inactive");
@@ -284,7 +305,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     });
 
                     $(".delete_sketch_button").click(function () {
-                        ($(this).parent("div").attr("id"));
+                        that.deleteSketch($(this).parent("div").attr("id"));
                         return false;
                     });
                 }

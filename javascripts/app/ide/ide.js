@@ -57,7 +57,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active").addClass("inactive");
                         $(this).addClass("active").removeClass("inactive");
                         instance.project(new Project($(this).find("a").attr("href")));
-                        that.toggleEditorAndDirectory();
+                        //that.toggleEditorAndDirectory();
                         return false;
                     });
 
@@ -256,7 +256,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active").addClass("inactive");
                         $(elt).addClass("active").removeClass("inactive");
                         instance.project(new Project($(elt).find("a").attr("href")));
-                        that.toggleEditorAndDirectory();
+                        //that.toggleEditorAndDirectory();
                         return false;
                     });
                 });

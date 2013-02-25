@@ -1,75 +1,8 @@
-/**
-Copyright (C) 2011 by Semmy Purewal
+window.jermaine.util.namespace("window.ide", function (ns) {
+    var Button = ns.Button;
+    var Project = ns.Project;
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-**/
-
-(function (window)  {
-    //////////////// BUTTON /////////////////////
-    var Button = new window.jermaine.Model(function () {
-        this.hasA("name").which.isA("string");
-        this.hasAn("imageURL").which.isA("string");
-        this.hasA("handler").which.isA("function");
-
-        this.hasA("view").which.validatesWith(function (v) {
-            return v instanceof window.jermaine.BaseView;
-        });
-
-        this.isBuiltWith("name", "imageURL", "handler", function () {
-            var that = this;
-            this.view(new ButtonView(this));
-        });
-    });
-
-    var ButtonView = new window.jermaine.View(function () {
-        var buttonTemplate = Handlebars.compile($("#button-template").html());
-        this.rendersWith(function (jsonRep) {
-            return buttonTemplate(jsonRep);
-        });
-    });
-    //////////////// BUTTON /////////////////////
-
-    //////////////// PROJECT /////////////////////
-    var Project = new window.jermaine.Model(function () {
-        this.hasA("title").which.isA("string");
-        this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
-        this.hasA("url").which.isA("string");
-
-        this.isBuiltWith("%url", function () {
-            var that = this;
-            if (this.url()) {
-                $.getJSON(this.url(), function(result) {
-                    if (!result.title || !result.source) {
-                        throw new Error("invalid project object");
-                    } else {
-                        that.title(result.title);
-                        that.source(result.source);
-                    }
-                });
-            } else {
-                that.title("default");
-            }
-        });
-    });
-    //////////////// PROJECT /////////////////////
-
-    //////////////// IDE /////////////////////////
+    //////////////// IDE MODEL /////////////////////////
     var IDE = new window.jermaine.Model (function () {
 
         this.hasAn("editor").which.isImmutable();
@@ -104,7 +37,9 @@ THE SOFTWARE.
             this.view(new IDEView(this));
         });
     });
+    //////////////// IDE MODEL /////////////////////////
 
+    //////////////// IDE VIEW //////////////////////////
     var IDEView = new window.jermaine.View (function () {
         var messageTimer,
             messageTimeout = 5000,
@@ -204,15 +139,15 @@ THE SOFTWARE.
                 var saveURL;
 
                 if (that.instance().changedFlag() === false) {
-	            that.instance().messages().add("no changes need to be saved");
+                    that.instance().messages().add("no changes need to be saved");
                 } else {
                     that.instance().project().source(that.instance().editor().getSession().getValue());
 
                     saveURL = that.instance().project().url().match(/(.*).json/)[1] + "/save";
-	            $.post(saveURL, { code: that.instance().project().source()},function(response)  {
-	                that.instance().messages().add(response);
+                    $.post(saveURL, { code: that.instance().project().source()},function(response)  {
+                        that.instance().messages().add(response);
                         that.instance().changedFlag(false);
-	            });
+                    });
                 }
             }));
         });
@@ -238,7 +173,6 @@ THE SOFTWARE.
                 this.addServerButtons();
             }
         });
-
 
         this.watches("messages", function (newMessage) {
             if (messageTimer !== null) {
@@ -301,7 +235,7 @@ THE SOFTWARE.
             });
         });
     });
-    //////////////// IDE /////////////////////////
+    //////////////// IDE VIEW //////////////////////////
 
-    window.IDE = IDE;
-})(window);
+    ns.IDE = IDE;
+});

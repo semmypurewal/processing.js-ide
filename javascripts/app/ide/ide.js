@@ -45,13 +45,34 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             toggleEditorAndDirectory;
 
         this.respondsTo("createNewSketch", function (name) {
-            var menuEntry = $("<div id='whatever' class='project_link directory_listing inactive'><a href='whatever/whatever'>"+name+"</a></div>");
-            menuEntry.hide();
-            menuEntry.insertAfter("#new_sketch_div");
-            $("#new_sketch_div").fadeOut(function () {
-                $("#new_sketch_input").val("");
-                menuEntry.fadeIn();
+            var that = this;
+            var instance = this.instance();
+            $.post("sketches/new", {"title":name}, function (sketch) {
+                if (typeof (sketch) === "object") {
+                    var menuEntry = $("<div id='"+sketch.slug+"' class='project_link directory_listing inactive'>"+
+                                      "<a href='sketches/"+sketch.slug+".json'>"+name+"</a></div>");
+                    menuEntry.hide();
+                    menuEntry.insertAfter("#new_sketch_div");
+                    menuEntry.click(function () {
+                        $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active").addClass("inactive");
+                        $(this).addClass("active").removeClass("inactive");
+                        instance.project(new Project($(this).find("a").attr("href")));
+                        that.toggleEditorAndDirectory();
+                        return false;
+                    });
+
+                    $("#new_sketch_div").fadeOut(function () {
+                        $("#new_sketch_input").val("");
+                        menuEntry.fadeIn(function () {
+                            menuEntry.trigger("click");
+                        });
+                    });
+                } else {
+                    console.log(sketch);
+                }
             });
+
+
         });
 
         this.respondsTo("toggleEditorAndDirectory", function () {
@@ -235,7 +256,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active").addClass("inactive");
                         $(elt).addClass("active").removeClass("inactive");
                         instance.project(new Project($(elt).find("a").attr("href")));
-                        //that.toggleEditorAndDirectory();
+                        that.toggleEditorAndDirectory();
                         return false;
                     });
                 });

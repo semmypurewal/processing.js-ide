@@ -66,14 +66,21 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         });
 
         this.respondsTo("createNewSketch", function (name) {
-            var that = this;
-            var instance = this.instance();
-            $.post("sketches/new", {"title":name}, function (sketch) {
-                if (typeof (sketch) === "object") {
-                    var menuEntry = $("<div id='"+sketch.slug+"' class='project_link directory_listing inactive'>"+
-                                      "<a href='sketches/"+sketch.slug+".json'>"+name+"</a> <span class='delete_sketch_button'>[-]</span></div>");
-                    menuEntry.hide();
+            var that = this,
+                instance = this.instance(),
+                directoryEntryTemplate = Handlebars.compile($("#directory-entry-partial").html());
+            
 
+            $.post("sketches/new", {"title":name}, function (sketch) {
+                var p = {"name":sketch.title,
+                         "directory":"sketches",
+                         "url":sketch.slug+".json"
+                         };
+
+                //because this is returning strings on error :(
+                if (typeof (sketch) === "object") {
+                    var menuEntry = $(directoryEntryTemplate(p));
+                    menuEntry.hide();
                     menuEntry.insertAfter("#new_sketch_div");
                     
                     if ($("#empty_directory").size() > 0) {
@@ -288,6 +295,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
 
             $.getJSON(newDirectory, function (result) {
                 var directoryTemplate = Handlebars.compile($("#directory-template").html());
+                Handlebars.registerPartial("directory-entry", $("#directory-entry-partial").html());
                 for (i = 0; i < result.length; ++i) {
                     result[i]["directory"] = "sketches";
                     result[i]["name"] = result[i]["url"].match(/(.*).json/)[1];

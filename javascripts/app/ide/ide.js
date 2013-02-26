@@ -113,7 +113,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         this.respondsTo("setActiveMenuItem", function (elt) {
             var project = this.instance().project();
             if (project !== undefined) {
-                console.log("#"+project.url().match(/\/(.*)\.json/)[1]);
                 $("#"+project.url().match(/\/(.*)\.json/)[1])
                     .removeClass("active")
                     .addClass("inactive");

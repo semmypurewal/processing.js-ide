@@ -216,9 +216,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     that.instance().messages().add("no changes need to be saved");
                 } else {
                     that.instance().project().source(that.instance().editor().getSession().getValue());
-
-                    saveURL = that.instance().project().url().match(/(.*).json/)[1] + "/save";
-                    $.post(saveURL, { code: that.instance().project().source()},function(response)  {
+                    that.instance().project().save(function (response) {
                         that.instance().messages().add(response);
                         that.instance().changedFlag(false);
                     });
@@ -233,7 +231,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             //add run button
             this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
                 that.instance().messages().add("running program");
-                //that.instance().project().source(that.instance().editor().getSession().getValue());
                 return false;
             }));
 

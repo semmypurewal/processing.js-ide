@@ -15,6 +15,9 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             var direction = $("#ide").is(":visible")?"lr":"rl";
             var elementA = $("#ide").is(":visible")?$("#ide"):$("#IDE-directory");
             var elementB = $("#ide").is(":visible")?$("#IDE-directory"):$("#ide");
+
+            $("#IDE-share").hide();
+
             
             elementA.flip({
                 speed: 200,

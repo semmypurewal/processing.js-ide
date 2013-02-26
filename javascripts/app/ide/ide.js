@@ -69,17 +69,16 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             var that = this,
                 instance = this.instance(),
                 directoryEntryTemplate = Handlebars.compile($("#directory-entry-partial").html());
-            
 
             $.post("sketches/new", {"title":name}, function (sketch) {
-                var p = {"name":sketch.title,
+                var p = {"title":sketch.title,
                          "directory":"sketches",
                          "url":sketch.slug+".json"
                          };
 
                 //because this is returning strings on error :(
                 if (typeof (sketch) === "object") {
-                    var menuEntry = $(directoryEntryTemplate(p));
+                    var menuEntry = $($.trim(directoryEntryTemplate(p)));
                     menuEntry.hide();
                     menuEntry.insertAfter("#new_sketch_div");
                     

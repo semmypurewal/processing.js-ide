@@ -62,6 +62,29 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         });
                     }
                 }));
+
+                this.instance().buttons().add(new Button("share", "images/icons/share.png", function () {
+                    var project = that.instance().project(),
+                        code = that.instance().editor().getSession().getValue(),
+                        shareTemplate = Handlebars.compile($.trim($("#share-template").html()));
+                        url = "http://"+window.location.host +
+                              "/"+project.user()+"/" +
+                              project.url().match(/sketches\/(.*).json/)[1] +
+                              "/embed/";
+
+                    var dims = code.match(/size\s*\(\s*(\d+)\s*,\s*(\d+)/);
+
+                    if (dims !== null && dims.length === 3) {
+                        width = dims[1];
+                        height = dims[2];
+                    } else {
+                        width = 200;
+                        height = 200;
+                    }
+
+                    $("#IDE-share #share_link").val(shareTemplate({"url":url, "width":width, "height":height}));
+                    $("#IDE-share").slideToggle();
+                }));
             }
         });
 
@@ -69,8 +92,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             var p;  //processing object
             var error;  //processing error
             var that = this;
-
-
             
             $("#IDE-run_button").colorbox({
                 'title' : this.instance().project().title(),

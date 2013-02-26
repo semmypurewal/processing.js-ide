@@ -2,6 +2,7 @@ window.jermaine.util.namespace("window.ide.models", function (ns) {
     var Project = new window.jermaine.Model(function () {
         this.hasA("title").which.isA("string");
         this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");
+        this.hasA("user").which.isA("string").and.defaultsTo("");
         this.hasA("url").which.isA("string");
 
         this.respondsTo("save", function (next) {
@@ -23,6 +24,11 @@ window.jermaine.util.namespace("window.ide.models", function (ns) {
                     } else {
                         that.title(result.title);
                         that.source(result.source);
+                        if (result.user !== undefined) {
+                            that.user(result.user);
+                        } else {
+                            that.user("");
+                        }
                     }
                 });
             } else {

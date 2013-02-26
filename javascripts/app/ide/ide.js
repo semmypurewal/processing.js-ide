@@ -41,13 +41,13 @@ window.jermaine.util.namespace("window.ide", function (ns) {
     //////////////// IDE VIEW //////////////////////////
     var IDEView = new window.jermaine.View (function () {
         var messageTimer,
-            messageTimeout = 5000,
-            toggleEditorAndDirectory;
+            messageTimeout = 5000;
 
+        //////////////// SKETCH RELATED STUFF //////////////////////////
         this.respondsTo("deleteSketch", function (name) {
             var that = this;
             var instance = this.instance();
-            if(confirm("Are you sure you want to delete '"+name+"'?"))  {
+            if (confirm("Are you sure you want to delete '"+name+"'?"))  {
                 $.post("sketches/"+name+"/delete", function (response) {
                     if ($("#"+name).hasClass("active")) {
                         if ($("#"+name).next("div.directory_listing").size() > 0) {
@@ -71,10 +71,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 directoryEntryTemplate = Handlebars.compile($("#directory-entry-partial").html());
 
             $.post("sketches/new", {"title":name}, function (sketch) {
-                var p = {"title":sketch.title,
-                         "directory":"sketches",
-                         "url":sketch.slug+".json"
-                         };
+                var p = {"title":sketch.title,"name":sketch.slug,"url":sketch.slug+".json"};
 
                 //because this is returning strings on error :(
                 if (typeof (sketch) === "object") {
@@ -89,19 +86,13 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         });
                     };
 
-                    //duplicate code
                     menuEntry.children("span").click(function () {
                         that.deleteSketch($(this).parent("div").attr("id"));
                         return false;
                     });
 
                     menuEntry.click(function () {
-                        if (instance.project() !== undefined) {
-                            $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active").addClass("inactive");
-                        }
-                        $(this).addClass("active").removeClass("inactive");
-                        instance.project(new Project($(this).find("a").attr("href")));
-                        //that.toggleEditorAndDirectory();
+                        that.setActiveMenuItem(this);
                         return false;
                     });
 
@@ -115,8 +106,27 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     console.log(sketch);
                 }
             });
+        });
+        //////////////// SKETCH RELATED STUFF //////////////////////////
 
+        //////////////// DIRECTORY RELATED STUFF //////////////////////////
+        this.respondsTo("setActiveMenuItem", function (elt) {
+            var project = this.instance().project();
+            if (project !== undefined) {
+                console.log("#"+project.url().match(/\/(.*)\.json/)[1]);
+                $("#"+project.url().match(/\/(.*)\.json/)[1])
+                    .removeClass("active")
+                    .addClass("inactive");
+            }
+            $(elt).addClass("active").removeClass("inactive");
+            this.instance().project(new Project($(elt).find("a").attr("href")));
+            //that.toggleEditorAndDirectory();
+        });
 
+        this.respondsTo("setUpEmptyDirectory", function () {
+            $("#IDE-title").unbind("click");
+            $("#IDE-title").html("&nbsp;");
+            $("#directory").append("<div id='empty_directory'><h3>you have no sketches :(</h3></br></br><h3>click the button above to add one :)</h3></div>");
         });
 
         this.respondsTo("toggleEditorAndDirectory", function () {
@@ -149,6 +159,31 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     
                 }
             });
+        });
+        //////////////// DIRECTORY RELATED STUFF //////////////////////////
+
+        //////////////// EDITOR RELATED STUFF //////////////////////////
+        this.respondsTo("addButtons", function () {
+            var that = this;
+
+            this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
+                that.instance().messages().add("running program");
+                return false;
+            }));
+
+            if ($("#ide").hasClass("server")) {
+                this.instance().buttons().add(new Button("save", "images/icons/save.png", function () {
+                    if (that.instance().changedFlag() === false) {
+                        that.instance().messages().add("no changes need to be saved");
+                    } else {
+                        that.instance().project().source(that.instance().editor().getSession().getValue());
+                        that.instance().project().save(function (response) {
+                            that.instance().messages().add(response);
+                            that.instance().changedFlag(false);
+                        });
+                    }
+                }));
+            }
         });
 
         this.respondsTo("setUpProcessingRunner", function () {
@@ -205,50 +240,17 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 }
             });
         });
-
-        this.respondsTo("setUpEmptyDirectory", function () {
-            $("#IDE-title").unbind("click");
-            $("#IDE-title").html("&nbsp;");
-            $("#directory").append("<div id='empty_directory'><h3>you have no sketches :(</h3></br></br><h3>click the button above to add one :)</h3></div>");
-        });
-
-        this.respondsTo("addServerButtons", function () {
-            var that = this;
-
-            this.instance().buttons().add(new Button("save", "images/icons/save.png", function () {
-                var saveURL;
-
-                if (that.instance().changedFlag() === false) {
-                    that.instance().messages().add("no changes need to be saved");
-                } else {
-                    that.instance().project().source(that.instance().editor().getSession().getValue());
-                    that.instance().project().save(function (response) {
-                        that.instance().messages().add(response);
-                        that.instance().changedFlag(false);
-                    });
-                }
-            }));
-        });
-
+        //////////////// EDITOR RELATED STUFF //////////////////////////
 
         this.initializesWith(function () {
             var that = this;
-
-            //add run button
-            this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
-                that.instance().messages().add("running program");
-                return false;
-            }));
-
 
             //set up the click responder on the title
             $("#IDE-title").click(function () {
                 that.toggleEditorAndDirectory();
             });
 
-            if ($("#ide").hasClass("server")) {
-                this.addServerButtons();
-            }
+            this.addButtons();
         });
 
         this.watches("messages", function (newMessage) {
@@ -266,7 +268,9 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         });
 
         this.watches("project", function (newProject) {
-            $("#IDE-directory #" + this.instance().project().url().match(/\/(.*)\.json/)[1]).addClass("active").removeClass("inactive");
+            $("#IDE-directory #" + this.instance().project().url().match(/\/(.*)\.json/)[1])
+                .addClass("active")
+                .removeClass("inactive");
             this.setUpProcessingRunner();
         });
 
@@ -280,7 +284,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         });
         
         this.watches("buttons", function (newButton) {
-            var button = $($.parseHTML(newButton.view().render()));
+            var button = $($.trim(newButton.view().render()));
             //add click function
             button.click(function () {
                 newButton.handler()();
@@ -296,23 +300,19 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 var directoryTemplate = Handlebars.compile($("#directory-template").html());
                 Handlebars.registerPartial("directory-entry", $("#directory-entry-partial").html());
                 for (i = 0; i < result.length; ++i) {
-                    result[i]["directory"] = "sketches";
                     result[i]["name"] = result[i]["url"].match(/(.*).json/)[1];
                 }
                 $("#IDE-directory").append(directoryTemplate({project:result}));
 
                 $(".directory_listing").each(function (i, elt) {
                     $(elt).click(function () {
-                        $("#"+instance.project().url().match(/\/(.*)\.json/)[1]).removeClass("active").addClass("inactive");
-                        $(elt).addClass("active").removeClass("inactive");
-                        instance.project(new Project($(elt).find("a").attr("href")));
-                        //that.toggleEditorAndDirectory();
+                        that.setActiveMenuItem(this);
                         return false;
                     });
                 });
 
                 if (result.length > 0) {
-                    instance.project(new Project(result[0]["directory"] + "/" + result[0].url));
+                    instance.project(new Project("sketches/" + result[0].url));
                 } else {
                     //show directory
                     that.toggleEditorAndDirectory();

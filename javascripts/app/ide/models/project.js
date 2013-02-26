@@ -1,4 +1,4 @@
-window.jermaine.util.namespace("window.ide", function (ns) {
+window.jermaine.util.namespace("window.ide.models", function (ns) {
     var Project = new window.jermaine.Model(function () {
         this.hasA("title").which.isA("string");
         this.hasA("source").which.isA("string").and.defaultsTo("//code goes here");

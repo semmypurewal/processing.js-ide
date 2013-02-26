@@ -38,12 +38,65 @@ window.jermaine.util.namespace("window.ide", function (ns) {
     });
     //////////////// IDE MODEL /////////////////////////
 
-    //////////////// IDE VIEW //////////////////////////
-    var IDEView = new window.jermaine.View (function () {
-        var messageTimer,
-            messageTimeout = 5000;
+    //////////////// DIRECTORY VIEW /////////////////////////
+    var DirectoryView = new window.jermaine.View (function () {
+        this.hasA("url").which.isA("string");
+        this.hasAn("ideView").which.validatesWith(function (v) {
+            return v instanceof IDEView;
+        });
 
-        //////////////// SKETCH RELATED STUFF //////////////////////////
+        this.isBuiltWith("url", "ideView", function () {
+            var instance = this.ideView().instance(),
+                that = this;
+
+            $.getJSON(this.url(), function (result) {
+                var directoryTemplate = Handlebars.compile($("#directory-template").html());
+                Handlebars.registerPartial("directory-entry", $("#directory-entry-partial").html());
+                for (i = 0; i < result.length; ++i) {
+                    result[i]["name"] = result[i]["url"].match(/(.*).json/)[1];
+                }
+                $("#IDE-directory").append(directoryTemplate({project:result}));
+
+                $(".directory_listing").each(function (i, elt) {
+                    $(elt).click(function () {
+                        that.setActiveMenuItem(this);
+                        return false;
+                    });
+                });
+
+                if (result.length > 0) {
+                    instance.project(new Project("sketches/" + result[0].url));
+                } else {
+                    //show directory
+                    that.toggleEditorAndDirectory();
+                    that.setUpEmptyDirectory();
+                }
+
+                if ($("#ide").hasClass("server")) {
+                    $("#new_sketch_button").click(function () {
+                        if ($("#new_sketch_div").is(":visible")) {
+                            $("#new_sketch_div").slideUp(function () {
+                                $("#new_sketch_input").val("");
+                            });
+                        } else {
+                            $("#new_sketch_div").slideDown();
+                        }
+                    });
+
+                    $("#new_sketch_input").keypress(function (e) {
+                        if (e.keyCode === 13 && $(this).val() !== "" ) {
+                            that.createNewSketch($(this).val());
+                        }
+                    });
+
+                    $(".delete_sketch_button").click(function () {
+                        that.deleteSketch($(this).parent("div").attr("id"));
+                        return false;
+                    });
+                }
+            });
+        });
+
         this.respondsTo("deleteSketch", function (name) {
             var that = this;
             var instance = this.instance();
@@ -107,18 +160,16 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 }
             });
         });
-        //////////////// SKETCH RELATED STUFF //////////////////////////
 
-        //////////////// DIRECTORY RELATED STUFF //////////////////////////
         this.respondsTo("setActiveMenuItem", function (elt) {
-            var project = this.instance().project();
+            var project = this.ideView().instance().project();
             if (project !== undefined) {
                 $("#"+project.url().match(/\/(.*)\.json/)[1])
                     .removeClass("active")
                     .addClass("inactive");
             }
             $(elt).addClass("active").removeClass("inactive");
-            this.instance().project(new Project($(elt).find("a").attr("href")));
+            this.ideView().instance().project(new Project($(elt).find("a").attr("href")));
             //that.toggleEditorAndDirectory();
         });
 
@@ -126,6 +177,18 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             $("#IDE-title").unbind("click");
             $("#IDE-title").html("&nbsp;");
             $("#directory").append("<div id='empty_directory'><h3>you have no sketches :(</h3></br></br><h3>click the button above to add one :)</h3></div>");
+        });
+    });
+    //////////////// DIRECTORY VIEW /////////////////////////
+
+    //////////////// IDE VIEW //////////////////////////
+    var IDEView = new window.jermaine.View (function () {
+        var messageTimer,
+            messageTimeout = 5000;
+
+
+        this.hasA("directoryView").which.validatesWith(function (v) {
+            return v instanceof DirectoryView;
         });
 
         this.respondsTo("toggleEditorAndDirectory", function () {
@@ -159,7 +222,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 }
             });
         });
-        //////////////// DIRECTORY RELATED STUFF //////////////////////////
+
 
         //////////////// EDITOR RELATED STUFF //////////////////////////
         this.respondsTo("addButtons", function () {
@@ -189,6 +252,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             var p;  //processing object
             var error;  //processing error
             var that = this;
+
+
             
             $("#IDE-run_button").colorbox({
                 'title' : this.instance().project().title(),
@@ -198,11 +263,12 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 'onLoad' : function()  {
                     var width, height;
                     var code = that.instance().editor().getSession().getValue();
+                    console.log(code);
                     var canvas = document.getElementById("processing_canvas");
+                    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
                     error = null;
                     
                     try  {
-
                         var dimensions = code.match(/\s+size\((\d+),(\d+)\)/);
                         if (dimensions !== null) {
                             width = parseInt(dimensions[1]);
@@ -292,55 +358,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         });
 
         this.watches("directory", function (newDirectory) {
-            var instance = this.instance(),
-                that = this;
-
-            $.getJSON(newDirectory, function (result) {
-                var directoryTemplate = Handlebars.compile($("#directory-template").html());
-                Handlebars.registerPartial("directory-entry", $("#directory-entry-partial").html());
-                for (i = 0; i < result.length; ++i) {
-                    result[i]["name"] = result[i]["url"].match(/(.*).json/)[1];
-                }
-                $("#IDE-directory").append(directoryTemplate({project:result}));
-
-                $(".directory_listing").each(function (i, elt) {
-                    $(elt).click(function () {
-                        that.setActiveMenuItem(this);
-                        return false;
-                    });
-                });
-
-                if (result.length > 0) {
-                    instance.project(new Project("sketches/" + result[0].url));
-                } else {
-                    //show directory
-                    that.toggleEditorAndDirectory();
-                    that.setUpEmptyDirectory();
-                }
-
-                if ($("#ide").hasClass("server")) {
-                    $("#new_sketch_button").click(function () {
-                        if ($("#new_sketch_div").is(":visible")) {
-                            $("#new_sketch_div").slideUp(function () {
-                                $("#new_sketch_input").val("");
-                            });
-                        } else {
-                            $("#new_sketch_div").slideDown();
-                        }
-                    });
-
-                    $("#new_sketch_input").keypress(function (e) {
-                        if (e.keyCode === 13 && $(this).val() !== "" ) {
-                            that.createNewSketch($(this).val());
-                        }
-                    });
-
-                    $(".delete_sketch_button").click(function () {
-                        that.deleteSketch($(this).parent("div").attr("id"));
-                        return false;
-                    });
-                }
-            });
+            this.directoryView(new DirectoryView(newDirectory, this));
         });
     });
     //////////////// IDE VIEW //////////////////////////

@@ -31,7 +31,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     instance.project(new Project("sketches/" + result[0].url));
                 } else {
                     //show directory
-                    that.toggleEditorAndDirectory();
+                    that.ideView().toggleEditorAndDirectory();
                     that.setUpEmptyDirectory();
                 }
 
@@ -98,7 +98,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     if ($("#empty_directory").size() > 0) {
                         $("#empty_directory").remove();
                         $("#IDE-title").click(function () {
-                            that.toggleEditorAndDirectory();
+                            that.ideView().toggleEditorAndDirectory();
                         });
                     };
 

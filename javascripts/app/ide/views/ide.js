@@ -88,8 +88,63 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     $("#IDE-share #share_link").val(shareTemplate({"url":url, "width":width, "height":height}));
                     $("#IDE-share").slideToggle();
                 }));
+
+                this.instance().buttons().add(new Button("share", "images/icons/attach.png", function () {
+                    $("#IDE-attach").slideToggle();
+                }));
+
+
             }
         });
+
+        this.respondsTo("setUpAttachButton", function () {
+            var that = this;
+            var validFile = function(filename)  {
+                var validList = ['jpg','jpeg','gif','png','svg'];
+                var i;
+                if(filename.match(/\.(jpg|jpeg|gif|png|svg)$/))  {
+                    return true;
+                }  else  {
+                    return false;
+                }
+            };
+
+            $("#attach_submit_button").click(function(evt)  {
+                var file = $("input#file_input").val();
+                var postURL = that.instance().project().url().match(/(.*).json/)[1]+"/attach/"; 
+                if(file === "")  {
+                    alert("please select a file");
+                } else if(!validFile(file))  {
+                    alert("sorry, we only work with jpg, jpeg, gif, png and svg at this time");
+                }  else  {
+                    console.log("about to post to " + postURL);
+                    $.ajax({
+                        url: postURL,
+                        type: "post",
+                        dataType: "JSON",
+                        data: {
+                            "file": file
+                        },
+                        success: function(res) {
+                            console.log("got an S3 policy!");
+                            $("#filename").val(res.filename);
+                            $("#policy").val(res.s3PolicyBase64);
+                            $("#accessKey").val(res.s3Key);
+                            $("#signature").val(res.s3Signature);
+                            
+                            $("#attach_form").submit();
+                            //fileAttached("File Attached!!!!!");
+                        },
+                        error: function(res, status, err) {
+                            console.log("S3 policy error: " + err + " (" + status + ")");
+                        }
+                    });
+                }
+
+                return false;
+            });
+        });
+
 
         this.respondsTo("setUpProcessingRunner", function () {
             var p;  //processing object
@@ -155,6 +210,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             });
 
             this.addButtons();
+            this.setUpAttachButton();
         });
 
         this.watches("messages", function (newMessage) {

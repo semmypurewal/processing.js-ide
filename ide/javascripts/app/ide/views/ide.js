@@ -48,13 +48,13 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         this.respondsTo("addButtons", function () {
             var that = this;
 
-            this.instance().buttons().add(new Button("run", "images/icons/run.png", function () {
+            this.instance().buttons().add(new Button("run", "ide/images/icons/run.png", function () {
                 that.instance().messages().add("running program");
                 return false;
             }));
 
             if ($("#ide").hasClass("server")) {
-                this.instance().buttons().add(new Button("save", "images/icons/save.png", function () {
+                this.instance().buttons().add(new Button("save", "ide/images/icons/save.png", function () {
                     if (that.instance().changedFlag() === false) {
                         that.instance().messages().add("no changes need to be saved");
                     } else {
@@ -66,7 +66,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     }
                 }));
 
-                this.instance().buttons().add(new Button("share", "images/icons/share.png", function () {
+                this.instance().buttons().add(new Button("share", "ide/images/icons/share.png", function () {
                     var project = that.instance().project(),
                         code = that.instance().editor().getSession().getValue(),
                         shareTemplate = Handlebars.compile($.trim($("#share-template").html()));

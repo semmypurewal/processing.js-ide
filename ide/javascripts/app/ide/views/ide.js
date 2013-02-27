@@ -89,7 +89,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     $("#IDE-share").slideToggle();
                 }));
 
-                this.instance().buttons().add(new Button("share", "images/icons/attach.png", function () {
+                this.instance().buttons().add(new Button("share", "ide/images/icons/attach.png", function () {
                     $("#IDE-attach").slideToggle();
                 }));
 

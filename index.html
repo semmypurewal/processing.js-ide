@@ -15,7 +15,7 @@
     </script>
 
     <script id="directory-template" type="text/x-handlebars-template">
-      <h2>Your Sketches <span id="new_sketch_button">[+]</span></h2>
+      <h2>Your Sketches</h2>
       <div id="directory">
         <div id="new_sketch_div" class="project_link inactive" style="display:none"><input id="new_sketch_input" placeholder="enter a name for your new sketch" size="50"/></div>
         {{#each project}}
@@ -25,9 +25,7 @@
     </script>
 
     <script id="directory-entry-partial" type="text/x-handlebars-template">
-      <div id="{{name}}" class="project_link directory_listing inactive"><a href="sketches/{{url}}">{{title}}</a> <span class="delete_sketch_button">
-          <img src="images/icons/x.png"></img>
-      </span></div>
+      <div id="{{name}}" class="project_link directory_listing inactive"><a href="sketches/{{url}}">{{title}}</a></div>
     </script>
   </head>
 

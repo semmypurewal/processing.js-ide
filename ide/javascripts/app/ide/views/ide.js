@@ -130,14 +130,14 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             "file": file
                         },
                         success: function(res) {
-                            console.log("got an S3 policy!");
+                            //console.log("got an S3 policy!");
                             $("#filename").val(res.filename);
                             $("#policy").val(res.s3PolicyBase64);
                             $("#accessKey").val(res.s3Key);
                             $("#signature").val(res.s3Signature);                            
                             that.instance().messages().add("file successfully attached");
                             $("#IDE-attach_button").trigger("click");
-                            //$("#attach_form").submit();
+                            $("#attach_form").submit();
                             //fileAttached("File Attached!!!!!");
                         },
                         error: function(res, status, err) {

@@ -138,6 +138,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             that.instance().messages().add("file successfully attached");
                             $("#IDE-attach_button").trigger("click");
                             $("#attach_form").submit();
+                            that.instance().project().resources().add({"filename":file.replace(/ /g, "_").split("\\").slice(-1)[0]});
+                            $("#file_input").val("");
                             //fileAttached("File Attached!!!!!");
                         },
                         error: function(res, status, err) {
@@ -237,10 +239,12 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 .addClass("active")
                 .removeClass("inactive");
             this.setUpProcessingRunner();
+            $("#resource_list").empty();
         });
 
         this.watches("project.resources", function (newResource) {
-
+            console.log(newResource.filename + " added");
+            $("#resource_list").append("<li>"+newResource.filename+"</li>");
         });
 
         this.watches("project.title", function (newTitle) {

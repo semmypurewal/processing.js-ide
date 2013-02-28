@@ -121,7 +121,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 } else if(!validFile(file))  {
                     alert("sorry, we only work with jpg, jpeg, gif, png and svg at this time");
                 }  else  {
-                    console.log("about to post to " + postURL);
                     $.ajax({
                         url: postURL,
                         type: "post",
@@ -243,7 +242,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         });
 
         this.watches("project.resources", function (newResource) {
-            console.log(newResource.filename + " added");
             $("#resource_list").append("<li>"+newResource.filename+"</li>");
         });
 

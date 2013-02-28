@@ -48,10 +48,16 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         this.respondsTo("addButtons", function () {
             var that = this;
 
+            this.instance().buttons().add(new Button("directory", "ide/images/icons/file.png", function () {
+                that.toggleEditorAndDirectory();
+            }));
+
             this.instance().buttons().add(new Button("run", "ide/images/icons/run.png", function () {
                 that.instance().messages().add("running program");
                 return false;
             }));
+
+
 
             if ($("#ide").hasClass("server")) {
                 this.instance().buttons().add(new Button("save", "ide/images/icons/save.png", function () {

@@ -35,6 +35,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     that.setUpEmptyDirectory();
                 }
 
+                $(".edit_sketch_button").click(function () {
+                    that.ideView().toggleEditorAndDirectory();
+                });
+
                 if ($("#ide").hasClass("server")) {
                     $("#new_sketch_button").click(function () {
                         if ($("#new_sketch_div").is(":visible")) {
@@ -50,10 +54,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         if (e.keyCode === 13 && $(this).val() !== "" ) {
                             that.createNewSketch($(this).val());
                         }
-                    });
-
-                    $(".edit_sketch_button").click(function () {
-                        that.ideView().toggleEditorAndDirectory();
                     });
 
                     $(".delete_sketch_button").click(function () {

@@ -89,7 +89,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     $("#IDE-share").slideToggle();
                 }));
 
-                this.instance().buttons().add(new Button("share", "ide/images/icons/attach.png", function () {
+                this.instance().buttons().add(new Button("attach", "ide/images/icons/attach.png", function () {
                     $("#IDE-attach").slideToggle();
                 }));
 
@@ -99,6 +99,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
 
         this.respondsTo("setUpAttachButton", function () {
             var that = this;
+
             var validFile = function(filename)  {
                 var validList = ['jpg','jpeg','gif','png','svg'];
                 var i;
@@ -108,6 +109,9 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     return false;
                 }
             };
+
+            attachTemplate = Handlebars.compile($.trim($("#attach-template").html()));
+            $("#IDE-attach").html(attachTemplate());
 
             $("#attach_submit_button").click(function(evt)  {
                 var file = $("input#file_input").val();
@@ -130,9 +134,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             $("#filename").val(res.filename);
                             $("#policy").val(res.s3PolicyBase64);
                             $("#accessKey").val(res.s3Key);
-                            $("#signature").val(res.s3Signature);
-                            
-                            $("#attach_form").submit();
+                            $("#signature").val(res.s3Signature);                            
+                            that.instance().messages().add("file successfully attached");
+                            $("#IDE-attach_button").trigger("click");
+                            //$("#attach_form").submit();
                             //fileAttached("File Attached!!!!!");
                         },
                         error: function(res, status, err) {
@@ -232,6 +237,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 .addClass("active")
                 .removeClass("inactive");
             this.setUpProcessingRunner();
+        });
+
+        this.watches("project.resources", function (newResource) {
+
         });
 
         this.watches("project.title", function (newTitle) {

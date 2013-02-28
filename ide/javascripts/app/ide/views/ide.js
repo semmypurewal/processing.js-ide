@@ -48,10 +48,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         this.respondsTo("addButtons", function () {
             var that = this;
 
-            this.instance().buttons().add(new Button("directory", "ide/images/icons/file.png", function () {
-                that.toggleEditorAndDirectory();
-            }));
-
             this.instance().buttons().add(new Button("run", "ide/images/icons/run.png", function () {
                 that.instance().messages().add("running program");
                 return false;
@@ -98,9 +94,11 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 this.instance().buttons().add(new Button("attach", "ide/images/icons/attach.png", function () {
                     $("#IDE-attach").slideToggle();
                 }));
-
-
             }
+
+            this.instance().buttons().add(new Button("directory", "ide/images/icons/file.png", function () {
+                that.toggleEditorAndDirectory();
+            }));
         });
 
         this.respondsTo("setUpAttachButton", function () {

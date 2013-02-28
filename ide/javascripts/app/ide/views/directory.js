@@ -52,6 +52,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         }
                     });
 
+                    $(".edit_sketch_button").click(function () {
+                        that.ideView().toggleEditorAndDirectory();
+                    });
+
                     $(".delete_sketch_button").click(function () {
                         that.deleteSketch($(this).parent("div").attr("id"));
                         return false;
@@ -102,8 +106,13 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         });
                     };
 
-                    menuEntry.children("span").click(function () {
+                    menuEntry.children(".delete_sketch_button").click(function () {
                         that.deleteSketch($(this).parent("div").attr("id"));
+                        return false;
+                    });
+
+                    menuEntry.children(".edit_sketch_button").click(function () {
+                        that.ideView().toggleEditorAndDirectory();
                         return false;
                     });
 

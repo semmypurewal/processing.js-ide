@@ -55,6 +55,10 @@ body {
     font-size: 2em;
 }
 
+#resource_list .delete_resource_button {
+    cursor: pointer;
+}
+
 #IDE-directory #new_sketch_button  {
     cursor: pointer;
 }

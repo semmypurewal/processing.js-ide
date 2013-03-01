@@ -139,7 +139,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             $("#accessKey").val(res.s3Key);
                             $("#signature").val(res.s3Signature);                            
                             that.instance().messages().add("file successfully attached");
-                            $("#IDE-attach_button").trigger("click");
+                            //$("#IDE-attach_button").trigger("click");
                             $("#attach_form").submit();
                             that.instance().project().resources().add({"filename":file.replace(/ /g, "_").split("\\").slice(-1)[0]});
                             $("#file_input").val("");
@@ -250,6 +250,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
 
             var resourceTemplate = Handlebars.compile($.trim($("#resource-entry-partial").html())),
                 elt = $(resourceTemplate({"filename":newResource.filename}));
+
 
             elt.children(".delete_resource_button").click(function () {
                 var eltToRemove = $(this).parent();

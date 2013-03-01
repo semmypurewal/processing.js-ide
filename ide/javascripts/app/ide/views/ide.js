@@ -17,6 +17,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             var elementB = $("#ide").is(":visible")?$("#IDE-directory"):$("#ide");
 
             $("#IDE-share").hide();
+            $("#IDE-attach").hide();
 
             
             elementA.flip({
@@ -71,7 +72,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 this.instance().buttons().add(new Button("share", "ide/images/icons/share.png", function () {
                     var project = that.instance().project(),
                         code = that.instance().editor().getSession().getValue(),
-                        shareTemplate = Handlebars.compile($.trim($("#share-template").html()));
+                        shareValueTemplate = Handlebars.compile($.trim($("#share-content-template").html())),
+                        shareTemplate = Handlebars.compile($.trim($("#share-template").html())),
                         url = "http://"+window.location.host +
                               "/"+project.user()+"/" +
                               project.url().match(/sketches\/(.*).json/)[1] +
@@ -87,7 +89,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         height = 200;
                     }
 
-                    $("#IDE-share #share_link").val(shareTemplate({"url":url, "width":width, "height":height}));
+
+
+                    $("#IDE-share").html(shareTemplate({}));
+                    $("#IDE-share #share_link").val(shareValueTemplate({"url":url, "width":width, "height":height}));
                     $("#IDE-share").slideToggle();
                 }));
 

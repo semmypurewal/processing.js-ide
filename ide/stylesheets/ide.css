@@ -28,6 +28,24 @@ body {
   min-height: 500px;
 }
 
+.IDE-dropdown {
+  border-radius: 5px 5px 0 0;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+.IDE-dropdown .content {
+  padding: 20px;
+}
+
+.IDE-dropdown h4 {
+  padding: 10px 0;
+  width: 100%;
+  background: #eee;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
 #IDE-buttons  {
   margin-top:5px;
   padding: 5px;

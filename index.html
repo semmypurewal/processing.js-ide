@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <title>Processing JS IDE</title>
 
+    <link type="text/css" rel="stylesheet" href="ide/stylesheets/font-awesome.min.css" media="screen" /> 
     <link type="text/css" rel="stylesheet" href="ide/stylesheets/reset.css" media="screen" />
     <link type="text/css" rel="stylesheet" href="ide/javascripts/lib/colorbox/example1/colorbox.css" media="screen" />
     <link type="text/css" rel="stylesheet" href="ide/stylesheets/ide.css" media="screen" />
@@ -25,13 +26,16 @@
     </script>
 
     <script id="directory-entry-partial" type="text/x-handlebars-template">
-      <div id="{{name}}" class="project_link directory_listing inactive"><a href="sketches/{{url}}">{{title}}</a>
+      <div id="{{name}}" class="project_link directory_listing inactive">
         <span class="edit_sketch_button">
-          <img height="13px" src="ide/images/icons/pencil.png" />&nbsp;
+          <i class="icon-edit button"></i>
         </span>
+        <span class="delete_sketch_button">
+          <i class="icon-remove button"></i>
+        </span>
+        <a class="sketch_title" href="sketches/{{url}}">{{title}}</a>
       </div>
     </script>
-
   </head>
 
   <body>

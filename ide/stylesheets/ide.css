@@ -46,6 +46,10 @@ body {
   border-bottom: 1px solid #ccc;
 }
 
+.IDE-dropdown h5 {
+  margin-bottom: 10px;
+}
+
 #IDE-buttons  {
   margin-top:5px;
   padding: 5px;

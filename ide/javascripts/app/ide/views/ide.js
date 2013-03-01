@@ -139,7 +139,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             $("#accessKey").val(res.s3Key);
                             $("#signature").val(res.s3Signature);                            
                             that.instance().messages().add("file successfully attached");
-                            //$("#IDE-attach_button").trigger("click");
+                            $("#IDE-attach_button").trigger("click");
                             $("#attach_form").submit();
                             that.instance().project().resources().add({"filename":file.replace(/ /g, "_").split("\\").slice(-1)[0]});
                             $("#file_input").val("");

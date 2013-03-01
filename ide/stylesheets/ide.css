@@ -3,6 +3,22 @@ body {
   margin: 10px auto 0 auto;
 }
 
+.button {
+  color: #484aa2;
+  padding: 3px 7px;
+  cursor: pointer;
+}
+
+.button:hover {
+  border-radius: 2px;
+  background: #888;
+  color: #fff;
+}
+
+.directory_listing a.sketch_title {
+  padding-left: 30px;
+}
+
 #logo  {
   margin-left: 10px;
 }
@@ -55,17 +71,6 @@ body {
     font-size: 2em;
 }
 
-#resource_list .delete_resource_button {
-    cursor: pointer;
-}
-
-#IDE-directory #new_sketch_button  {
-    cursor: pointer;
-}
-
-#IDE-directory #new_sketch_button {
-    color: blue;
-}
 
 #IDE-directory .inactive:hover {
     background: #efefff;
@@ -76,6 +81,10 @@ body {
     padding: 10px;
     margin-left: 20px;
     border-radius: 5px;
+}
+
+#IDE-directory .project_link a {
+    color: #000;
 }
 
 #IDE-directory a {

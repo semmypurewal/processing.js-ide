@@ -142,7 +142,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             }
             $(elt).addClass("active").removeClass("inactive");
             this.ideView().instance().project(new Project($(elt).find("a").attr("href")));
-            //that.toggleEditorAndDirectory();
+            //this.ideView().toggleEditorAndDirectory();
         });
 
         this.respondsTo("setUpEmptyDirectory", function () {

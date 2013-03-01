@@ -246,7 +246,24 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         });
 
         this.watches("project.resources", function (newResource) {
-            $("#resource_list").append("<li>"+newResource.filename+"</li>");
+            var that = this;
+
+            var resourceTemplate = Handlebars.compile($.trim($("#resource-entry-partial").html())),
+                elt = $(resourceTemplate({"filename":newResource.filename}));
+
+            elt.children(".delete_resource_button").click(function () {
+                var eltToRemove = $(this).parent();
+                var postURL = that.instance().project().url().match(/(.*).json/)[1]+"/"+newResource.filename+"/remove/"; 
+                if (confirm("Are you sure you want to delete " + newResource.filename + " from this sketch?")) {
+                    $.post(postURL, {}, function (response) {
+                        that.instance().messages().add(response);
+                        eltToRemove.fadeOut(function () {
+                            eltToRemove.remove();
+                        });
+                    });
+                };
+            });
+            $("#resource_list").append(elt);
         });
 
         this.watches("project.title", function (newTitle) {

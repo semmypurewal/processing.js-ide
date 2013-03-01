@@ -128,7 +128,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         });
                     });
                 } else {
-                    console.log(sketch);
+                    that.ideView().instance().messages().add(sketch);
                 }
             });
         });

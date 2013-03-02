@@ -31,13 +31,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     that.ideView().toggleEditorAndDirectory();
                 });
 
-                if (result.length > 0) {
-                    instance.project(new Project("sketches/" + result[0].url));
-                } else {
-                    //show directory
-                    that.ideView().toggleEditorAndDirectory();
-                    that.setUpEmptyDirectory();
-                }
+
 
                 $(".edit_sketch_button").click(function () {
                     that.ideView().toggleEditorAndDirectory();
@@ -68,6 +62,15 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         that.deleteSketch($(this).parent("div").attr("id"));
                         return false;
                     });
+                }
+
+
+                if (result.length > 0) {
+                    instance.project(new Project("sketches/" + result[0].url));
+                } else {
+                    //show directory
+                    that.ideView().toggleEditorAndDirectory();
+                    that.setUpEmptyDirectory();
                 }
             });
         });
@@ -156,7 +159,9 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         this.respondsTo("setUpEmptyDirectory", function () {
             $("#IDE-editor_button").unbind("click");
             $("#IDE-title").html("&nbsp;");
-            $("#directory").append("<div id='empty_directory'><h3>you have no sketches :(</h3></br></br><h3>click the button above to add one :)</h3></div>");
+            if (!$("#new_sketch_input").is(":visible")) {
+                $("#new_sketch_button").trigger("click");
+            }
         });
     });
 

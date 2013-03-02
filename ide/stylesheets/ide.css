@@ -4,7 +4,6 @@ body {
 }
 
 .button {
-  color: #484aa2;
   padding: 3px 7px;
   cursor: pointer;
 }
@@ -25,6 +24,7 @@ body {
 
 #ide  {
   margin: 10px auto 0 auto;
+  width: 100%;
   min-height: 500px;
 }
 
@@ -50,7 +50,7 @@ body {
   margin-bottom: 10px;
 }
 
-#IDE-buttons  {
+#ide header {
   margin-top:5px;
   padding: 5px;
   background: #ddd;
@@ -58,6 +58,23 @@ body {
   border-color: #A9A9A9;
   border-width: 1px 1px 0 1px;
   border-radius: 5px 5px 0 0;
+  min-height: 50px;
+}
+
+#IDE-buttons  {
+  float: left;
+  width: 50%;
+}
+
+#IDE-title  {
+  line-height: 50px;
+  float: right;
+  width: 40%;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: right;
+  margin-right: 10px;
 }
 
 .IDE-button  {
@@ -73,23 +90,58 @@ body {
   //border: 2px dotted #A9A9A9;
 }
 
+#IDE-editor { 
+  border: 1px solid #A9A9A9;
+  white-space:pre;
+  width:958px;;
+  height: 450px;
+}
+
+#IDE-message-container  {
+  min-height: 15px;
+  line-height:14px;
+  padding-left: 12px;
+  width:70%;
+  text-align: left;
+  font-family: courier,monospace;
+  font-size:10pt;
+  color: #a9a9a9;
+}
+
 #IDE-directory {
+    width: 100%;
     margin: 10px auto 0 auto;
     height: 470px;
     max-height: 470px;
     overflow: scroll;
     border: 1px solid #a9a9a9;
     border-radius: 5px 5px 0 0;
-    padding: 20px;
 }
 
-#IDE-directory h2 {
+#IDE-directory header {
+    min-height: 50px;
+    background: #eee;
     margin-bottom: 20px;
     font-weight: bold;
     font-family: arial, sans-serif;
-    font-size: 2em;
+    min-height: 50px;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
 }
 
+#IDE-directory #buttons {
+    width:50%;
+    float: left;
+}
+
+#IDE-directory h2 {
+    line-height: 50px;
+    width: 40%;
+    font-size: 1.5em;
+    float: right;
+    text-align: right;
+    margin-right: 10px;
+}
 
 #IDE-directory .inactive:hover {
     background: #efefff;
@@ -114,32 +166,5 @@ body {
 }
 
 #IDE-directory .active {
-
     background: #eee;
-}
-
-#IDE-editor { 
-  border: 1px solid #A9A9A9;
-  white-space:pre;
-  width:958px;;
-  height: 450px;
-}
-
-#IDE-message  {
-  line-height:14px;
-  padding-left: 12px;
-  float: left;
-  width:70%;
-  text-align: left;
-  font-family: courier,monospace;
-  font-size:10pt;
-  color: #a9a9a9;
-}
-
-#IDE-title  {
-  font-family: arial, sans-serif;
-  font-weight: bold;
-  color: #999999;
-  text-align: right;
-  cursor: pointer;
 }

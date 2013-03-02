@@ -10,14 +10,21 @@
     <link type="text/css" rel="stylesheet" href="ide/stylesheets/ide.css" media="screen" />
 
     <script id="button-template" type="text/x-handlebars-template">
-      <div href="" id='IDE-{{name}}_button' class='IDE-button'>
+      <div id='IDE-{{name}}_button' class='IDE-button'>
         <!-- <img src='{{imageURL}}' /> -->
         <i class="{{imageURL}} icon-large"></i>
       </div>
     </script>
 
     <script id="directory-template" type="text/x-handlebars-template">
-      <h2>Your Sketches</h2>
+      <header>
+        <div id ="buttons">
+          <div id="IDE-editor_button" class="IDE-button">
+            <i class="icon-edit icon-large"></i>
+          </div>
+        </div>
+        <h2>your sketches</h2>
+      </header>
       <div id="directory">
         <div id="new_sketch_div" class="project_link inactive" style="display:none"><input id="new_sketch_input" placeholder="enter a name for your new sketch" size="50"/></div>
         {{#each project}}
@@ -49,15 +56,20 @@
 
     <img id="logo" src="ide/images/processing_ide_logo.png" />
 
-    <div id="IDE-message">&nbsp</div>
-    <div id="IDE-title">&nbsp</div>
-
-    <div id="ide">
-      <div id="IDE-buttons">&nbsp</div>
-      <div id="IDE-editor">&nbsp</div>
+    <div id="IDE-message-container">
+      <div id="IDE-message">&nbsp;</div>
     </div>
 
-    <div id="IDE-directory" style="display: none;"></div>
+    <div id="ide">
+      <header>
+        <div id="IDE-buttons">&nbsp;</div>
+        <div id="IDE-title">&nbsp;</div>
+      </header>
+      <div id="IDE-editor">&nbsp;</div>
+    </div>
+
+    <div id="IDE-directory" style="display: none;">
+    </div>
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.min.js" charset="utf-8"></script>

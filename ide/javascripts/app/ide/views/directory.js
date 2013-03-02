@@ -39,6 +39,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     that.ideView().toggleEditorAndDirectory();
                 });
 
+                $("#IDE-editor_button").click(function () {
+                    that.ideView().toggleEditorAndDirectory();
+                });
+
                 if ($("#ide").hasClass("server")) {
                     $("#new_sketch_button").click(function () {
                         if ($("#new_sketch_div").is(":visible")) {

@@ -91,6 +91,9 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     $("#IDE-share").html(shareTemplate({}));
                     $("#IDE-share #share_link").val(shareValueTemplate({"url":url, "width":width, "height":height}));
                     $("#IDE-share").slideToggle();
+                    $("#close_share_dropdown").click(function () {
+                        $("#IDE-share_button").trigger("click");
+                    });
                 }));
 
                 //this.instance().buttons().add(new Button("attach", "ide/images/icons/attach.png", function () {
@@ -119,6 +122,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
 
             attachTemplate = Handlebars.compile($.trim($("#attach-template").html()));
             $("#IDE-attach").html(attachTemplate());
+            $("#close_attach_dropdown").click(function () {
+                $("#IDE-attach_button").trigger("click");
+            });
+            
 
             $("#attach_submit_button").click(function(evt)  {
                 var file = $("input#file_input").val();

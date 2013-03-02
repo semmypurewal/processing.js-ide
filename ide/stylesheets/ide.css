@@ -61,17 +61,15 @@ body {
 }
 
 .IDE-button  {
+  font-size:25pt;
   cursor: pointer;
   display: inline;
-}
-
-.IDE-button img {
   border: 2px solid #EEEEEE;
-  height: 50px;
+  min-height: 50px;
   width: 50px;
 }
 
-.IDE-button:hover img  {
+.IDE-button:hover  {
   background: #FFFFEE;
   border: 2px dotted #A9A9A9;
 }

@@ -49,7 +49,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         this.respondsTo("addButtons", function () {
             var that = this;
 
-            this.instance().buttons().add(new Button("run", "ide/images/icons/run.png", function () {
+            //this.instance().buttons().add(new Button("run", "ide/images/icons/run.png", function () {
+            this.instance().buttons().add(new Button("run", "icon-play", function () {
                 that.instance().messages().add("running program");
                 return false;
             }));
@@ -57,7 +58,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
 
 
             if ($("#ide").hasClass("server")) {
-                this.instance().buttons().add(new Button("save", "ide/images/icons/save.png", function () {
+                //this.instance().buttons().add(new Button("save", "ide/images/icons/save.png", function () {
+                this.instance().buttons().add(new Button("save", "icon-save", function () {
                     if (that.instance().changedFlag() === false) {
                         that.instance().messages().add("no changes need to be saved");
                     } else {
@@ -101,7 +103,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 }));
             }
 
-            this.instance().buttons().add(new Button("directory", "ide/images/icons/file.png", function () {
+            this.instance().buttons().add(new Button("directory", "icon-home", function () {
                 that.toggleEditorAndDirectory();
             }));
         });

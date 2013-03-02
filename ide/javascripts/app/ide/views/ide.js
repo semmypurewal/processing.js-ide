@@ -26,15 +26,9 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 color:"#fff",
                 onBefore: function () {
                     elementA.hide();
-                    $("#IDE-title").unbind("click");
                 },
                 onEnd: function () {
                     elementB.show();
-                    if ($("#empty_directory").size() === 0) {
-                        $("#IDE-title").click(function () {
-                            that.toggleEditorAndDirectory();
-                        });
-                    }
                     //this is a hack to force Ace to update when the editor
                     //becomes visible again
                     if ($("#ide").is(":visible")) {
@@ -222,11 +216,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
 
         this.initializesWith(function () {
             var that = this;
-
-            //set up the click responder on the title
-            $("#IDE-title").click(function () {
-                that.toggleEditorAndDirectory();
-            });
 
             this.addButtons();
             this.setUpAttachButton();

@@ -27,6 +27,10 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     });
                 });
 
+                $("#IDE-editor_button").click(function () {
+                    that.ideView().toggleEditorAndDirectory();
+                });
+
                 if (result.length > 0) {
                     instance.project(new Project("sketches/" + result[0].url));
                 } else {
@@ -39,9 +43,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     that.ideView().toggleEditorAndDirectory();
                 });
 
-                $("#IDE-editor_button").click(function () {
-                    that.ideView().toggleEditorAndDirectory();
-                });
+
 
                 if ($("#ide").hasClass("server")) {
                     $("#new_sketch_button").click(function () {
@@ -53,6 +55,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             $("#new_sketch_div").slideDown();
                         }
                     });
+
+
 
                     $("#new_sketch_input").keypress(function (e) {
                         if (e.keyCode === 13 && $(this).val() !== "" ) {
@@ -105,7 +109,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     
                     if ($("#empty_directory").size() > 0) {
                         $("#empty_directory").remove();
-                        $("#IDE-title").click(function () {
+                        $("#IDE-editor_button").click(function () {
                             that.ideView().toggleEditorAndDirectory();
                         });
                     };
@@ -150,7 +154,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
         });
 
         this.respondsTo("setUpEmptyDirectory", function () {
-            $("#IDE-title").unbind("click");
+            $("#IDE-editor_button").unbind("click");
             $("#IDE-title").html("&nbsp;");
             $("#directory").append("<div id='empty_directory'><h3>you have no sketches :(</h3></br></br><h3>click the button above to add one :)</h3></div>");
         });

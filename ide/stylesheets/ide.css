@@ -113,15 +113,19 @@ body {
     margin: 10px auto 0 auto;
     height: 470px;
     max-height: 470px;
-    overflow: scroll;
     border: 1px solid #a9a9a9;
     border-radius: 5px 5px 0 0;
+}
+
+#IDE-directory #directory {
+    max-height: 390px;
+    overflow: auto;
 }
 
 #IDE-directory header {
     min-height: 50px;
     background: #eee;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     font-weight: bold;
     font-family: arial, sans-serif;
     min-height: 50px;
@@ -131,6 +135,7 @@ body {
 
 #IDE-directory #buttons {
     width:50%;
+    padding-left: 10px;
     float: left;
 }
 

@@ -71,7 +71,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     }
                 }));
 
-                this.instance().buttons().add(new Button("share", "ide/images/icons/share.png", function () {
+                //this.instance().buttons().add(new Button("share", "ide/images/icons/share.png", function () {
+                this.instance().buttons().add(new Button("share", "icon-globe", function () {
                     var project = that.instance().project(),
                         code = that.instance().editor().getSession().getValue(),
                         shareValueTemplate = Handlebars.compile($.trim($("#share-content-template").html())),
@@ -98,7 +99,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     $("#IDE-share").slideToggle();
                 }));
 
-                this.instance().buttons().add(new Button("attach", "ide/images/icons/attach.png", function () {
+                //this.instance().buttons().add(new Button("attach", "ide/images/icons/attach.png", function () {
+                this.instance().buttons().add(new Button("attach", "icon-paper-clip", function () {
                     $("#IDE-attach").slideToggle();
                 }));
             }

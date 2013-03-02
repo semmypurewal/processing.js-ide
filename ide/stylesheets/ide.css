@@ -53,7 +53,7 @@ body {
 #IDE-buttons  {
   margin-top:5px;
   padding: 5px;
-  background: #EEEEEE;
+  background: #ddd;
   border-style: solid;
   border-color: #A9A9A9;
   border-width: 1px 1px 0 1px;
@@ -64,14 +64,13 @@ body {
   font-size:25pt;
   cursor: pointer;
   display: inline;
-  border: 2px solid #EEEEEE;
-  min-height: 50px;
-  width: 50px;
 }
 
 .IDE-button:hover  {
-  background: #FFFFEE;
-  border: 2px dotted #A9A9A9;
+  border-radius: 5px;
+  color: #ffe;
+  //background: #FFFFEE;
+  //border: 2px dotted #A9A9A9;
 }
 
 #IDE-directory {

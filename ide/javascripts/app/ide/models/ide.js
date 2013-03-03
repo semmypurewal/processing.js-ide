@@ -27,6 +27,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
             //initialize editor as ace editor
             this.editor(ace.edit("IDE-editor"));
             this.editor().setTheme("ace/theme/eclipse");
+            this.editor().getSession().setMode("ace/mode/java");
             this.editor().setHighlightActiveLine(false);
             this.editor().renderer.setShowPrintMargin(false);
 

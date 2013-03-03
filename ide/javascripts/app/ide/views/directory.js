@@ -31,8 +31,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     that.ideView().toggleEditorAndDirectory();
                 });
 
-
-
                 $(".edit_sketch_button").click(function () {
                     that.ideView().toggleEditorAndDirectory();
                 });
@@ -142,6 +140,16 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             menuEntry.trigger("click");
                         });
                     });
+
+                    //if there is only one element in the list,
+                    //we need to re-enable the editor button
+                    if ($(".directory_listing").size() === 1) {
+                        $("#IDE-editor_button").click(function () {
+                            that.ideView().toggleEditorAndDirectory();
+                        });
+                    }
+
+
                 } else {
                     that.ideView().instance().messages().add(sketch);
                 }

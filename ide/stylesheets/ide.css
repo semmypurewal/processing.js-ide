@@ -14,6 +14,15 @@ body {
   color: #fff;
 }
 
+a.resource_entry {
+    text-decoration: none;
+    color: blue;
+}
+
+a.resource_entry:hover {
+    text-decoration: underline;
+}
+
 .directory_listing a.sketch_title {
   padding-left: 30px;
 }

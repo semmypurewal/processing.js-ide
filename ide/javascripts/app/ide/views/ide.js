@@ -210,9 +210,6 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         console.log(error);
                         $.colorbox.close();
                     } else  {
-                        if (p) {
-                            p.exit();
-                        }
                         $("#processing_canvas").focus();
                     }
                 },

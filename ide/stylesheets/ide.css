@@ -1,6 +1,11 @@
 body {
   width:960px;
   margin: 10px auto 0 auto;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Oxygen', sans-serif;
 }
 
 .button {
@@ -84,7 +89,6 @@ a.resource_entry:hover {
   line-height: 50px;
   float: right;
   width: 40%;
-  font-family: arial, sans-serif;
   font-weight: bold;
   font-size: 1.5em;
   text-align: right;
@@ -146,7 +150,6 @@ a.resource_entry:hover {
     background: #eee;
     margin-bottom: 5px;
     font-weight: bold;
-    font-family: arial, sans-serif;
     min-height: 50px;
     padding: 5px;
     border-bottom: 1px solid #ccc;
@@ -184,7 +187,7 @@ a.resource_entry:hover {
 }
 
 #IDE-directory a {
-    font-family: arial, sans-serif;
+    font-family: 'Oxygen', sans-serif;
     font-weight: bold;
     text-decoration: none;
     color: #55f

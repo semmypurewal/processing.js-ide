@@ -54,7 +54,11 @@ window.jermaine.util.namespace("window.ide", function (ns) {
 
                     $("#new_sketch_input").keypress(function (e) {
                         if (e.keyCode === 13 && $(this).val() !== "" ) {
-                            that.createNewSketch($(this).val());
+                            if ($(this).val().length > 30) {
+                                that.ideView().instance().messages().add("sketch title can't be more than 30 characters");
+                            } else {
+                                that.createNewSketch($(this).val());                                
+                            }
                         }
                     });
 

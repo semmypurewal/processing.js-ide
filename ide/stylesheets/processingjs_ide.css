@@ -13,17 +13,18 @@ body  {
 }
 
 #admin_header  {
-    color: #aaa;
     font-family: helvetica, arial, sans-serif;
     width: 268px;
     height: 30px;
     float: right;
-    line-height: 30px;
+    line-height: 70px;
     text-align: right;
 }
 
 .admin_link  {
-    color: blue;
+    font-family: 'Open Sans', arial;
+    font-weight: bold;
+    color: #4890dc;
     text-decoration: none;
     margin-left: 17px;
     margin-right: 17px;

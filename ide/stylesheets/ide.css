@@ -100,13 +100,15 @@ a.resource_entry:hover {
   font-size:25pt;
   cursor: pointer;
   display: inline;
+  transition: all .3s;
+  -moz-transition: all .3s;
+  -webkit-transition: all .3s;
+  -o-transition: all .3s;
 }
 
 .IDE-button:hover  {
   border-radius: 5px;
-  color: #ffe;
-  //background: #FFFFEE;
-  //border: 2px dotted #A9A9A9;
+  color: #998;
 }
 
 #IDE-editor { 

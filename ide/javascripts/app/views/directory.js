@@ -16,7 +16,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                 var directoryTemplate = Handlebars.compile($("#directory-template").html());
                 Handlebars.registerPartial("directory-entry", $("#directory-entry-partial").html());
                 for (i = 0; i < result.length; ++i) {
-                    result[i]["name"] = result[i]["url"].match(/(.*).json/)[1];
+                    result[i].name = result[i].url.match(/(.*).json/)[1];
                 }
                 $("#IDE-directory").append(directoryTemplate({project:result}));
 
@@ -117,7 +117,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                         $("#IDE-editor_button").click(function () {
                             that.ideView().toggleEditorAndDirectory();
                         });
-                    };
+                    }
 
                     menuEntry.children(".delete_sketch_button").click(function () {
                         that.deleteSketch($(this).parent("div").attr("id"));

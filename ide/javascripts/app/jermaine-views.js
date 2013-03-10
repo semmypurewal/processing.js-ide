@@ -70,7 +70,7 @@
 
                 for (key in watchers) {
                     this.watches(key, watchers[key]);
-                };
+                }
 
                 if (renderer !== null) {
                     this.renderer(renderer);
@@ -84,19 +84,19 @@
 
         ResultView.rendersWith = function (r) {
             renderer = r;
-        }
+        };
 
         ResultView.watches = function (a, r) {
             watchers[a] = r;
-        }
+        };
 
         ResultView.initializesWith = function (init) {
             initializer = init;
-        }
+        };
 
         specification.call(ResultView);
 
         return ResultView;
     };
 
-}(window))
+}(window));

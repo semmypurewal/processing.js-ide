@@ -186,8 +186,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                     try  {
                         var dimensions = code.match(/\s+size\((\d+),(\d+)\)/);
                         if (dimensions !== null) {
-                            width = parseInt(dimensions[1]);
-                            height = parseInt(dimensions[2]);
+                            width = parseInt(dimensions[1], 10);
+                            height = parseInt(dimensions[2], 10);
                         } else {
                             width = 200;
                             height = 200;
@@ -267,7 +267,7 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             eltToRemove.remove();
                         });
                     });
-                };
+                }
             });
             $("#resource_list").append(elt);
         });

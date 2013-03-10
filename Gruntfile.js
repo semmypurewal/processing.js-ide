@@ -52,11 +52,21 @@ module.exports = function (grunt) {
                       "ide/javascripts/build/app.js"],
                 dest: "ide/javascripts/build/<%= pkg.name %>.js"
             }
+        },
+
+
+        uglify: {
+            minify: {
+                files: {
+                    "ide/javascripts/build/processingjs-ide.min.js": ["ide/javascripts/build/processingjs-ide.js"]
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-concat");
+    grunt.loadNpmTasks("grunt-contrib-uglify");
     
-    grunt.registerTask("default", ["jshint", "concat"]);
+    grunt.registerTask("default", ["jshint", "concat", "uglify"]);
 };

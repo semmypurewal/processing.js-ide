@@ -4805,8 +4805,8 @@ window.jermaine.util.namespace("window.jermaine", function (ns) {
 
         this.respondsTo("save", function (next) {
             var that = this,
-                saveURL = this.url().match(/(.*).json/)[1] + "/save";
-
+            saveURL = this.url().match(/(.*).json/)[1] + "/save";
+            
             $.post(saveURL, { code: this.source() } , function(response)  {
                 next(response);
             });
@@ -4817,7 +4817,7 @@ window.jermaine.util.namespace("window.jermaine", function (ns) {
             var that = this,
                 i;
             if (this.url()) {
-                $.post(this.url(), {}, function(result) {
+                $.post(this.url(), {"slug": this.url()}, function(result) {
                     if (!result.title || !result.source) {
                         throw new Error("invalid project object");
                     } else {

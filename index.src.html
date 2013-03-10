@@ -50,29 +50,31 @@
   </head>
 
   <body>
-    <div style="display: none;">
-      <div id="canvas">
-        <canvas id="processing_canvas">
-        </canvas>
-      </div>
-    </div>
-
     <img id="logo" src="ide/images/processing_ide_logo.png" />
 
-    <div id="IDE-message-container">
-      <div id="IDE-message">&nbsp;</div>
+    <div id="container">
+      <div id="ide">
+        <div id="IDE-message-container">
+          <div id="IDE-message">&nbsp;</div>
+        </div>
+        
+        <header>
+          <div id="IDE-buttons">&nbsp;</div>
+          <div id="IDE-title">&nbsp;</div>
+        </header>
+        <div id="IDE-editor">&nbsp;</div>
+        
+        <div style="display: none;">
+          <div id="canvas">
+            <canvas id="processing_canvas">
+            </canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div id="IDE-directory" style="display: none;"></div>
     </div>
 
-    <div id="ide">
-      <header>
-        <div id="IDE-buttons">&nbsp;</div>
-        <div id="IDE-title">&nbsp;</div>
-      </header>
-      <div id="IDE-editor">&nbsp;</div>
-    </div>
-
-    <div id="IDE-directory" style="display: none;">
-    </div>
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.min.js" charset="utf-8"></script>

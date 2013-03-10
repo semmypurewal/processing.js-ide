@@ -16,6 +16,7 @@ module.exports = function (grunt) {
         "ace-builds/src-min/theme-eclipse.js",
         "ace-builds/src-min/mode-java.js",
         "colorbox/jquery.colorbox.js",
+        "flip/jquery.flip.js",
         "processing/processing-1.4.1.min.js",
         "handlebars/handlebars-1.0.rc.1.js",
         "jermaine/build/jermaine.js",
@@ -24,6 +25,8 @@ module.exports = function (grunt) {
 
 
     grunt.initConfig({
+        pkg: grunt.file.readJSON("package.json"),
+
         jshint: {
             all: ["Gruntfile.js", "ide/javascripts/app/**/*.js"]
         },
@@ -47,7 +50,7 @@ module.exports = function (grunt) {
             all: {
                 src: ["ide/javascripts/build/lib.js",
                       "ide/javascripts/build/app.js"],
-                dest: "ide/javascripts/build/ide.js"
+                dest: "ide/javascripts/build/<%= pkg.name %>.js"
             }
         }
     });

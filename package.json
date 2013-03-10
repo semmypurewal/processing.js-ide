@@ -1,5 +1,5 @@
 {
-  "name": "processing.js-ide",
+  "name": "processingjs-ide",
   "version": "0.1.0",
   "devDependencies": {
     "grunt": "~0.4.0",

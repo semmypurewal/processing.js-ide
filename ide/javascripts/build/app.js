@@ -462,6 +462,8 @@ window.jermaine.util.namespace("window.ide.models", function (ns) {
                 },
                 
                 'onComplete' : function()  {
+
+
                     if(error)  {
                         console.log(error);
                         $.colorbox.close();
@@ -470,6 +472,7 @@ window.jermaine.util.namespace("window.ide.models", function (ns) {
                     }
                 },
                 'onCleanup' : function()  {
+                    that.instance().editor().focus();                    
                     if(p)  {
                         p.exit();
                     }

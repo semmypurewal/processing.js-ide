@@ -5258,6 +5258,8 @@ window.jermaine.util.namespace("window.jermaine", function (ns) {
                 },
                 
                 'onComplete' : function()  {
+
+
                     if(error)  {
                         console.log(error);
                         $.colorbox.close();
@@ -5266,6 +5268,7 @@ window.jermaine.util.namespace("window.jermaine", function (ns) {
                     }
                 },
                 'onCleanup' : function()  {
+                    that.instance().editor().focus();                    
                     if(p)  {
                         p.exit();
                     }

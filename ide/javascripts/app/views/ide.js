@@ -189,8 +189,8 @@ window.jermaine.util.namespace("window.ide", function (ns) {
                             width = parseInt(dimensions[1], 10);
                             height = parseInt(dimensions[2], 10);
                         } else {
-                            width = 200;
-                            height = 200;
+                            width = 100;
+                            height = 100;
                         }
                         $("#processing_canvas").css('width',width);
                         $("#processing_canvas").css('height',height);
